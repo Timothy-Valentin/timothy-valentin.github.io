@@ -10,21 +10,29 @@ const writeups = (await getCollection('writeups', ({ data }) => !data.draft)).so
 ---
 
 <BaseLayout
-  title="Write-ups & entraînement cyber"
-  description="Write-ups méthodologiques de challenges Root-Me orientés réseau : analyse de trames Wireshark, cartographie Nmap."
+  title="Pratique Root-Me"
+  description="Pratique des fondamentaux réseau sur la plateforme Root-Me : méthodologie d'analyse de trames avec Wireshark et préconisations de sécurité."
 >
   <div class="container-page py-10">
     <PageHeader
-      eyebrow="Entraînement cyber"
-      title="Write-ups"
-      intro="Je m'entraîne sur Root-Me, principalement dans les catégories Réseau et Forensic. Ces write-ups décrivent la méthodologie, les outils et surtout la remédiation côté défense — jamais les flags."
+      eyebrow="Entraînement"
+      title="Pratique Root-Me"
+      intro="Root-Me est une plateforme française et légale d'entraînement à la sécurité informatique. J'y pratique les challenges de découverte réseau, qui complètent ma formation SISR. Ces fiches présentent la méthode suivie et les préconisations de sécurité qui en découlent."
     >
-      <p class="mt-4 text-sm text-zinc-500">
-        Charte : conformément aux règles de Root-Me, aucune solution ni aucun mot de passe de
-        validation n'est publié. Profil :{' '}
-        <a href={SITE.rootme.url} rel="noopener" class="text-cyan-700 hover:underline dark:text-cyan-400"
-          >root-me.org/{SITE.rootme.handle}</a
-        >.
+      <p class="mt-4 text-sm text-slate-500">
+        Conformément aux règles de Root-Me, aucune solution ni aucun mot de passe de validation
+        n'est publié.
+        {
+          SITE.rootme && (
+            <>
+              {' '}Profil :{' '}
+              <a href={SITE.rootme.url} rel="noopener" class="text-brand-700 hover:underline dark:text-brand-300">
+                root-me.org/{SITE.rootme.handle}
+              </a>
+              .
+            </>
+          )
+        }
       </p>
     </PageHeader>
 
@@ -36,7 +44,7 @@ const writeups = (await getCollection('writeups', ({ data }) => !data.draft)).so
             title={w.data.title}
             description={w.data.description}
             date={w.data.date}
-            label={`${w.data.categorie} · ${w.data.difficulte}`}
+            label={w.data.categorie}
             tags={w.data.outils}
           />
         ))

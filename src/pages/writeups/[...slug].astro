@@ -18,18 +18,18 @@ const d = entry.data;
   title={d.title}
   description={d.description}
   date={d.date}
-  eyebrow={`Write-up · ${d.plateforme}`}
-  back={{ href: 'writeups/', label: 'Tous les write-ups' }}
+  eyebrow={`Entraînement · ${d.plateforme}`}
+  back={{ href: 'writeups/', label: 'Retour à la pratique Root-Me' }}
   meta={[
     { label: 'Plateforme', value: d.plateforme },
     { label: 'Catégorie', value: d.categorie },
-    { label: 'Difficulté', value: d.difficulte },
+    ...(d.difficulte ? [{ label: 'Difficulté', value: d.difficulte }] : []),
     { label: 'Outils', value: d.outils.join(', ') },
   ]}
   tags={d.tags}
   headings={headings}
   readingTime={readingTime(entry.body)}
-  notice="Write-up méthodologique : conformément à la charte Root-Me, aucun flag ni mot de passe de validation n'est divulgué."
+  notice="Fiche méthodologique : conformément aux règles de Root-Me, aucune solution ni aucun mot de passe de validation n'est divulgué."
 >
   <Content />
 </ArticleLayout>

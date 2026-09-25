@@ -1,5 +1,5 @@
 ---
-import { Menu, Search, Terminal } from '@lucide/astro';
+import { Menu, Search } from '@lucide/astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { NAV, SITE } from '@/config/site';
 import { url } from '@/utils/url';
@@ -12,15 +12,12 @@ const isActive = (href: string) => {
 ---
 
 <header
-  class="sticky top-0 z-40 border-b border-zinc-200 bg-zinc-50/90 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/85"
+  class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90"
 >
   <div class="container-page flex h-14 items-center justify-between gap-4">
-    <a
-      href={url()}
-      class="flex items-center gap-2 font-mono text-sm font-bold text-zinc-900 dark:text-zinc-100"
-    >
-      <Terminal class="size-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
-      <span>{SITE.shortTitle}</span>
+    <a href={url()} class="flex flex-col leading-tight">
+      <span class="text-sm font-semibold text-brand-800 dark:text-slate-100">{SITE.author}</span>
+      <span class="text-xs text-slate-500 dark:text-slate-400">BTS SIO — option SISR</span>
     </a>
 
     <nav aria-label="Navigation principale" class="hidden md:block">
@@ -32,10 +29,10 @@ const isActive = (href: string) => {
                 href={url(item.href)}
                 aria-current={isActive(item.href) ? 'page' : undefined}
                 class:list={[
-                  'rounded px-2.5 py-1.5 transition-colors hover:text-cyan-700 dark:hover:text-cyan-300',
+                  'rounded px-2.5 py-1.5 transition-colors hover:text-brand-700 dark:hover:text-brand-300',
                   isActive(item.href)
-                    ? 'text-cyan-700 dark:text-cyan-400'
-                    : 'text-zinc-600 dark:text-zinc-400',
+                    ? 'text-brand-700 dark:text-brand-400'
+                    : 'text-slate-600 dark:text-slate-400',
                 ]}
               >
                 {item.label}
@@ -49,7 +46,7 @@ const isActive = (href: string) => {
     <div class="flex items-center gap-1">
       <a
         href={url('recherche/')}
-        class="rounded p-2 text-zinc-600 hover:text-cyan-700 dark:text-zinc-400 dark:hover:text-cyan-300"
+        class="rounded p-2 text-slate-600 hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-300"
         aria-label="Rechercher dans le portfolio"
         title="Rechercher"
       >
@@ -58,14 +55,14 @@ const isActive = (href: string) => {
       <ThemeToggle />
       <details class="group relative md:hidden">
         <summary
-          class="list-none rounded p-2 text-zinc-600 hover:text-cyan-700 dark:text-zinc-400 [&::-webkit-details-marker]:hidden"
+          class="list-none rounded p-2 text-slate-600 hover:text-brand-700 dark:text-slate-400 [&::-webkit-details-marker]:hidden"
           aria-label="Ouvrir le menu"
         >
           <Menu class="size-5" aria-hidden="true" />
         </summary>
         <nav
           aria-label="Navigation mobile"
-          class="absolute right-0 mt-2 w-52 rounded-lg border border-zinc-200 bg-white p-2 shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+          class="absolute right-0 mt-2 w-52 rounded-lg border border-slate-200 bg-white p-2 shadow-lg dark:border-slate-800 dark:bg-slate-900"
         >
           <ul class="flex flex-col text-sm">
             {
@@ -75,8 +72,8 @@ const isActive = (href: string) => {
                     href={url(item.href)}
                     aria-current={isActive(item.href) ? 'page' : undefined}
                     class:list={[
-                      'block rounded px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800',
-                      isActive(item.href) && 'text-cyan-700 dark:text-cyan-400',
+                      'block rounded px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800',
+                      isActive(item.href) && 'text-brand-700 dark:text-brand-400',
                     ]}
                   >
                     {item.label}

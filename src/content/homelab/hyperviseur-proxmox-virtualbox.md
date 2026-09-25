@@ -1,150 +1,87 @@
 ---
 title: "Hyperviseur Proxmox VE & VirtualBox"
-description: "Architecture de mon hyperviseur personnel : Proxmox VE sur ZFS miroir pour les services permanents, VirtualBox pour les labs jetables, et un réseau de test cyber totalement isolé du reste de l'infrastructure."
+description: "Montage matériel d'un serveur (installation de la mémoire vive et des disques durs), installation complète de Proxmox VE, puis création de machines virtuelles Debian, Ubuntu et d'un environnement de test Kali Linux. VirtualBox en complément pour les tests sur poste personnel."
 date: 2026-02-14
 tags:
   - Proxmox VE
   - VirtualBox
-  - ZFS
-  - LVM-thin
-  - Isolation
-  - Snapshots
-materiel:
-  - "Dell OptiPlex 7070 SFF reconditionné"
-  - "Intel Core i7-9700 (8 cœurs, VT-x / VT-d)"
-  - "32 Go DDR4"
-  - "NVMe 512 Go (système) + 2 × SSD SATA 1 To (ZFS miroir)"
-  - "Carte réseau Intel i350 double port"
+  - Montage matériel
+  - Debian
+  - Ubuntu
+  - Kali Linux
 ordre: 1
 ---
 
-## Pourquoi deux hyperviseurs ?
+## Objectif
 
-| | **Proxmox VE** (type 1) | **VirtualBox** (type 2) |
+Disposer d'un environnement personnel pour **pratiquer en dehors des cours** : reproduire les
+travaux des ateliers, tester des configurations sans risque et découvrir des outils de sécurité
+dans un cadre maîtrisé.
+
+J'utilise deux hyperviseurs complémentaires :
+
+| | **Proxmox VE** | **VirtualBox** |
 | --- | --- | --- |
-| Où | Machine dédiée allumée en permanence | Mon PC portable |
-| Pour quoi | Services durables : pare-feu, DNS, Syslog, Git, maquettes d'atelier | Labs jetables, révisions en mobilité, VM fournies en cours (`.ova`) |
-| Réseau | Bridges VLAN-aware, pare-feu intégré | NAT, réseau interne, « host-only » |
-| Atout | Snapshots ZFS, sauvegardes, API, cloud-init | Portable, aucune infrastructure requise |
+| Type | Hyperviseur de type 1 (installé directement sur le matériel) | Hyperviseur de type 2 (logiciel installé sur un système existant) |
+| Support | Serveur dédié | Mon ordinateur personnel |
+| Usage | Machines virtuelles durables, administrées à distance | Tests rapides et ponctuels |
 
-Les deux sont complémentaires : je prototype sur VirtualBox, puis je pérennise sur Proxmox
-ce qui mérite de l'être (export `.ova` → import avec `qm importovf`).
+## 1. Montage matériel du serveur
 
-## Architecture de l'hôte Proxmox
+Avant l'installation logicielle, j'ai réalisé moi-même la **préparation physique du serveur** :
 
-```mermaid
-flowchart LR
-    subgraph HOST["pve-lab — Proxmox VE 9"]
-        direction TB
-        subgraph STOR["Stockage"]
-            nvme["NVMe 512 Go<br/>ext4 + LVM-thin<br/>système + ISO"]
-            zfs["rpool-data — ZFS miroir<br/>2 × SSD 1 To<br/>disques des VM"]
-        end
-        subgraph NET["Réseau"]
-            vmbr0["vmbr0 — VLAN-aware<br/>port 1 : trunk vers le switch"]
-            vmbr1["vmbr1 — SANS port physique<br/>réseau cyber isolé"]
-        end
-    end
+- **installation des barrettes de mémoire vive** dans les emplacements prévus par la carte mère ;
+- **installation et raccordement des disques durs** (fixation, câbles de données et d'alimentation) ;
+- vérification au démarrage que la mémoire et les disques sont bien détectés par le BIOS/UEFI ;
+- activation dans le BIOS/UEFI des **extensions de virtualisation** du processeur, indispensables au fonctionnement d'un hyperviseur.
 
-    fw["VM pfSense<br/>pare-feu / routeur"] --- vmbr0
-    svc["LXC services<br/>DNS · Syslog · Gitea"] --- vmbr0
-    kali["VM Kali Linux"] --- vmbr1
-    vuln["VM vulnérables<br/>Metasploitable · DVWA"] --- vmbr1
-    vmbr1 -. "aucune route<br/>aucun NAT" .- vmbr0
-```
+**Précautions appliquées :** machine hors tension et débranchée, décharge de l'électricité
+statique avant de manipuler les composants, respect du sens des détrompeurs.
 
-## Stockage : ZFS et LVM-thin
+## 2. Installation de Proxmox VE
 
-### Choix du ZFS pour les VM
+L'installation complète du système a suivi les étapes suivantes :
 
-Les disques des VM sont sur un **pool ZFS en miroir** :
+1. **téléchargement de l'image ISO** depuis le site officiel de Proxmox et création d'une clé USB d'installation ;
+2. **démarrage** du serveur sur la clé USB ;
+3. **choix du disque cible** pour le système ;
+4. paramètres régionaux, **mot de passe administrateur** et adresse e-mail de notification ;
+5. **configuration réseau** de l'interface d'administration : nom d'hôte, adresse IP fixe, passerelle et serveur DNS ;
+6. redémarrage, puis accès à l'**interface web d'administration** depuis un autre poste du réseau (port 8006, en HTTPS) ;
+7. **mise à jour** du système après installation.
 
-```bash
-zpool create -o ashift=12 rpool-data mirror \
-  /dev/disk/by-id/ata-SSD_1TB_A /dev/disk/by-id/ata-SSD_1TB_B
-zfs set compression=lz4 rpool-data        # gain ~30 % sans coût CPU notable
-zfs set atime=off rpool-data              # moins d'écritures inutiles
-zfs set xattr=sa rpool-data
-pvesm add zfspool vm-zfs --pool rpool-data --content images,rootdir --sparse 1
-```
+Une adresse IP **fixe** est indispensable : l'hyperviseur est administré à distance, son adresse
+ne doit pas changer.
 
-| Critère | ZFS miroir | LVM-thin |
-| --- | --- | --- |
-| Intégrité des données | **Sommes de contrôle** sur chaque bloc, auto-réparation en miroir | Aucune vérification |
-| Snapshots | Instantanés, sans impact de performance | Possibles, mais dégradent les performances |
-| Consommation mémoire | Élevée (ARC) — je la plafonne | Faible |
-| Usage chez moi | Disques des VM | Système, ISO, modèles |
+## 3. Création des machines virtuelles
 
-Le cache ARC de ZFS prend par défaut jusqu'à la moitié de la RAM : je le limite à 8 Go
-pour laisser la mémoire aux VM.
+Depuis l'interface web, j'ai créé plusieurs machines virtuelles :
 
-```bash
-echo "options zfs zfs_arc_max=$((8 * 1024**3))" > /etc/modprobe.d/zfs.conf
-update-initramfs -u -k all
-```
+| Machine virtuelle | Usage |
+| --- | --- |
+| **Debian** | Découverte de l'administration Linux en mode serveur |
+| **Ubuntu** | Tests de services et d'interopérabilité (comme en atelier) |
+| **Kali Linux** | Environnement de test pour la pratique de la sécurité |
 
-Un **scrub** mensuel vérifie l'intégrité de tous les blocs (tâche fournie par Proxmox
-dans `/etc/cron.d/zfsutils-linux`), et j'en surveille le résultat avec `zpool status -x`.
+Pour chaque machine, la démarche est identique : téléverser l'image ISO dans le stockage de
+Proxmox, créer la VM en définissant ses ressources (processeurs, mémoire, taille du disque, carte
+réseau), démarrer sur l'ISO, puis installer le système.
 
-### Sauvegardes (règle 3-2-1)
+### Précautions pour l'environnement Kali Linux
 
-- **Snapshots ZFS** avant toute manipulation risquée : `qm snapshot 110 avant-maj`.
-- **Sauvegardes `vzdump`** planifiées chaque nuit, mode `snapshot`, compression `zstd`, rétention 7 quotidiennes + 4 hebdomadaires.
-- **Copie hors machine** hebdomadaire sur un disque USB, déconnecté entre deux sauvegardes (protection contre un rançongiciel).
+Kali Linux regroupe des outils d'audit de sécurité. Leur usage est encadré par la loi : je ne les
+utilise **que sur mes propres machines** ou sur des plateformes d'entraînement prévues à cet effet,
+comme [Root-Me](../../writeups/root-me-fondamentaux-reseau-protocoles-en-clair/).
 
-Une sauvegarde n'existe que si sa restauration a été testée : je restaure une VM au
-hasard chaque mois sur un VMID de test.
+## 4. VirtualBox en complément
 
-## Isolation des VM de test cyber
-
-C'est la règle la plus importante de mon homelab : **une VM vulnérable ne doit jamais
-pouvoir joindre mon réseau domestique ni Internet**.
-
-### Mise en œuvre
-
-1. **Bridge sans port physique** : `vmbr1` n'a aucune interface réelle — il est physiquement impossible pour une trame d'en sortir.
-
-   ```bash
-   # /etc/network/interfaces
-   auto vmbr1
-   iface vmbr1 inet manual
-       bridge-ports none
-       bridge-stp off
-       bridge-fd 0
-   # Remarque : aucune adresse IP sur l'hôte → l'hôte n'est pas joignable depuis ce réseau
-   ```
-
-2. **Aucune IP de l'hôte** sur ce bridge : Proxmox lui-même est invisible depuis le lab.
-3. **Pare-feu Proxmox activé** sur chaque carte des VM du lab, politique `DROP` en sortie vers toute adresse hors `192.168.66.0/24`.
-4. **Pas de dossiers partagés ni de presse-papier** entre VM et hôte (VirtualBox : `Shared Clipboard: Disabled`, `Drag'n'Drop: Disabled`).
-5. **Snapshot « propre »** de chaque VM vulnérable, restauré après chaque session.
-
-### Équivalent sous VirtualBox
-
-Sur le portable, les labs utilisent exclusivement le mode **« Réseau interne »**
-(`intnet-cyber`) : les VM communiquent entre elles, sans NAT ni accès à l'hôte. Un serveur
-DHCP interne est déclaré pour ce réseau :
-
-```bash
-VBoxManage dhcpserver add --network=intnet-cyber \
-  --server-ip=192.168.66.1 --netmask=255.255.255.0 \
-  --lower-ip=192.168.66.100 --upper-ip=192.168.66.200 --enable
-VBoxManage modifyvm "Kali-Lab" --nic1 intnet --intnet1 intnet-cyber
-VBoxManage modifyvm "Kali-Lab" --clipboard-mode disabled --drag-and-drop disabled
-```
-
-### Vérification de l'isolation
-
-Depuis la VM Kali, avant chaque nouvelle série d'exercices :
-
-```bash
-ping -c 2 -W 1 1.1.1.1          # doit échouer : pas d'Internet
-ping -c 2 -W 1 192.168.1.254    # doit échouer : pas de réseau domestique
-ip route                        # une seule route : 192.168.66.0/24
-```
+Sur mon ordinateur personnel, VirtualBox me permet de lancer rapidement une machine virtuelle
+pour un test ponctuel. J'y utilise notamment les différents **modes réseau** proposés
+(NAT, réseau interne, accès par pont), ce qui m'a aidé à comprendre concrètement les notions
+d'isolement et d'adressage vues en cours.
 
 ## Ce que ce homelab m'apporte
 
-- Un terrain où **casser sans conséquence** : chaque configuration de mes projets E4/E5 y a été testée d'abord.
-- Une compréhension concrète du stockage (intégrité, snapshots, sauvegardes) que l'on ne voit pas sur une maquette de TP éphémère.
-- Des réflexes de sécurité : isolation par conception, principe de moindre privilège appliqué même chez soi.
+- une vision complète, **du composant matériel jusqu'au service**, que les ateliers sur machines déjà préparées ne donnent pas ;
+- la pratique régulière de l'installation et de l'administration de systèmes Linux ;
+- un cadre sûr pour **expérimenter sans risque** pour une infrastructure de production.

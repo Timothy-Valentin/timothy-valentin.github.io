@@ -15,7 +15,7 @@ import ciscoIos from './src/plugins/cisco-ios.tmLanguage.mjs';
  * (https://<user>.github.io/) ou un domaine personnalisé.
  * Les valeurs par défaut ci-dessous servent aux builds locaux.
  */
-const site = process.env.SITE_URL || 'https://valentin-timothy.github.io';
+const site = process.env.SITE_URL || 'https://timothy-valentin.github.io';
 // BASE_PATH vide (dépôt <user>.github.io ou domaine personnalisé) → racine « / ».
 const base = process.env.BASE_PATH === undefined ? '/portfolio' : process.env.BASE_PATH || '/';
 

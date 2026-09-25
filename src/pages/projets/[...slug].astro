@@ -23,8 +23,8 @@ const d = entry.data;
   meta={[
     { label: 'Cadre', value: d.cadre },
     { label: 'Contexte', value: d.contexte },
-    { label: 'Durée', value: d.duree },
-    { label: 'Organisation', value: d.equipe },
+    ...(d.duree ? [{ label: 'Durée', value: d.duree }] : []),
+    ...(d.equipe ? [{ label: 'Organisation', value: d.equipe }] : []),
     { label: 'Compétences SISR', value: d.competences.join(' · ') },
     { label: 'Technologies', value: d.technologies.join(', ') },
   ]}

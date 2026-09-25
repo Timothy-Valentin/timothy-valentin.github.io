@@ -9,7 +9,7 @@ technologique sur l'architecture Zero Trust.
 | Élément | Choix |
 | --- | --- |
 | Framework | [Astro 7](https://astro.build) (site 100 % statique), Markdown via Sätteri + MDX |
-| Styles | Tailwind CSS 4 + `@tailwindcss/typography`, thème sombre par défaut |
+| Styles | Tailwind CSS 4 + `@tailwindcss/typography`, thème clair par défaut (mode sombre au choix) |
 | Recherche | [Pagefind](https://pagefind.app), index généré au build, exécuté côté client |
 | Diagrammes | Mermaid.js (chargé uniquement sur les pages qui en contiennent) |
 | Icônes | `@lucide/astro` (SVG inline) |
@@ -29,7 +29,7 @@ npm run preview   # prévisualisation du build de production
 
 ```text
 src/
-├── config/site.ts        # identité, liens, empreinte PGP (source unique)
+├── config/site.ts        # identité, liens, certification (source unique)
 ├── content.config.ts     # schémas Zod des collections
 ├── content/
 │   ├── projets/          # fiches E4/E5
@@ -39,7 +39,6 @@ src/
 ├── layouts/  components/  pages/  plugins/  scripts/  styles/
 public/
 ├── .well-known/security.txt   # RFC 9116
-├── pgp/timothy-valentin.asc   # clé publique OpenPGP
 └── robots.txt
 ```
 

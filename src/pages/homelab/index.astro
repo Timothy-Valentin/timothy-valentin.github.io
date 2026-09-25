@@ -10,31 +10,33 @@ const fiches = (await getCollection('homelab', ({ data }) => !data.draft)).sort(
 );
 
 const topologie = `flowchart LR
-  internet((Internet)) --- box[Box FAI<br/>192.168.1.0/24]
-  box --- fw[pfSense VM<br/>WAN / LAN]
-  subgraph pve[Proxmox VE]
-    fw --- v10[vmbr0 · VLAN 10<br/>Services]
-    fw --- v20[vmbr0 · VLAN 20<br/>Admin]
-    v66[vmbr1 · sans port physique<br/>Lab cyber isolé]
+  admin["Poste d'administration<br/>PuTTY · navigateur web"]
+  subgraph pve["Serveur Proxmox VE"]
+    deb["VM Debian"]
+    ubu["VM Ubuntu"]
+    kali["VM Kali Linux<br/>environnement de test"]
   end
-  v20 --- srv[Serveur Debian durci<br/>SSH ed25519 + fail2ban]
-  v10 --- svc[Conteneurs LXC<br/>DNS · Syslog · Git]
-  v66 --- lab[VM d'entraînement<br/>aucune route sortante]`;
+  subgraph vbox["Ordinateur personnel — VirtualBox"]
+    vm["VM de test ponctuelles"]
+  end
+  admin -- "interface web (HTTPS 8006)" --> pve
+  admin -- "SSH" --> deb
+  admin -- "SSH" --> ubu`;
 ---
 
 <BaseLayout
-  title="Homelab & infrastructure personnelle"
-  description="Documentation du homelab de Timothy Valentin : hyperviseur Proxmox VE, VirtualBox, stockage ZFS/LVM, serveur Debian durci."
+  title="Homelab"
+  description="Homelab de Timothy Valentin : serveur Proxmox VE monté et installé par mes soins, machines virtuelles Debian, Ubuntu et Kali Linux, VirtualBox et administration avec PuTTY."
 >
   <div class="container-page py-10">
     <PageHeader
-      eyebrow="Infrastructure personnelle"
+      eyebrow="Environnement personnel"
       title="Homelab"
-      intro="Mon environnement de test permanent : chaque configuration présentée en projet a d'abord été cassée, réparée et documentée ici. Tout y est segmenté, et le laboratoire cyber n'a aucune route vers le reste du réseau."
+      intro="L'environnement que j'utilise pour pratiquer en dehors de la formation : un serveur Proxmox VE que j'ai monté et installé moi-même, complété par VirtualBox sur mon ordinateur personnel."
     />
 
     <section class="mt-10" aria-labelledby="vue-ensemble">
-      <h2 id="vue-ensemble" class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+      <h2 id="vue-ensemble" class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
         Vue d'ensemble
       </h2>
       <pre class="mermaid mt-4" data-pagefind-ignore>{topologie}</pre>

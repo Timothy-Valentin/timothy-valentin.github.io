@@ -1,10 +1,8 @@
 # security.txt — conforme à la RFC 9116
-# Politique de divulgation responsable du portfolio de Timothy Valentin.
-# Merci de chiffrer tout rapport sensible avec la clé OpenPGP indiquée ci-dessous.
+# Contact pour le signalement d'un problème de sécurité sur ce portfolio.
 
 Contact: mailto:timothy.valentins@gmail.com
 Expires: 2027-09-24T22:00:00.000Z
-Encryption: https://valentin-timothy.github.io/portfolio/pgp/timothy-valentin.asc
 Preferred-Languages: fr, en
-Canonical: https://valentin-timothy.github.io/portfolio/.well-known/security.txt
-Policy: https://valentin-timothy.github.io/portfolio/contact/
+Canonical: https://timothy-valentin.github.io/portfolio/.well-known/security.txt
+Policy: https://timothy-valentin.github.io/portfolio/contact/

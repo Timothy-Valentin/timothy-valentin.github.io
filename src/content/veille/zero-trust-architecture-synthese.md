@@ -26,11 +26,14 @@ sources:
 ordre: 1
 ---
 
+> Cette fiche est le produit de ma veille. La démarche suivie (sources, outils, organisation)
+> est décrite dans la fiche [Méthodologie et outils de veille](../methodologie-outils-veille/).
+
 ## Pourquoi ce sujet de veille ?
 
-Pendant mon [stage au Ministère de la Justice](../../projets/deploiement-reseau-nouveau-batiment-justice/),
-j'ai mis en œuvre une segmentation classique : des VLAN, un pare-feu, un tunnel vers le site
-central. Ce modèle repose sur une hypothèse implicite : **ce qui est à l'intérieur est
+En formation comme pendant mon [stage au Ministère de la Justice](../../projets/deploiement-reseau-nouveau-batiment-justice/),
+j'ai travaillé sur des architectures classiques : des VLAN, des routeurs, des pare-feu en
+périphérie. Ce modèle repose sur une hypothèse implicite : **ce qui est à l'intérieur est
 digne de confiance**. Or les incidents majeurs des dernières années (rançongiciels dans des
 hôpitaux et des collectivités, compromissions d'identités) montrent qu'un attaquant, une
 fois entré, se déplace latéralement sans rencontrer de résistance.
@@ -107,21 +110,20 @@ L'identité remplace l'adresse IP comme critère principal :
 
 Là où un VLAN regroupe des dizaines de machines, la micro-segmentation isole **chaque
 charge de travail** : deux serveurs du même sous-réseau ne peuvent communiquer que si une
-règle l'autorise explicitement. Les outils : pare-feu distribués sur les hyperviseurs (comme
-le pare-feu Proxmox que j'utilise dans mon [homelab](../../homelab/hyperviseur-proxmox-virtualbox/)),
-groupes de sécurité cloud, agents sur les hôtes.
+règle l'autorise explicitement. Les outils : pare-feu distribués sur les hyperviseurs (Proxmox VE
+en intègre un), groupes de sécurité cloud, agents sur les hôtes.
 
-**Lien avec mon parcours :** la règle de refus par défaut entre les VLAN greffe et
-administration de mon stage est une **première étape** vers la micro-segmentation — elle
-limite le mouvement latéral, mais à l'échelle d'un service entier, pas d'une machine.
+**Lien avec ma formation :** la segmentation en VLAN que j'ai pratiquée en
+[atelier](../../projets/infrastructure-systeme-proxmox-dhcp-vlan/) est une **première étape** :
+elle sépare les populations, mais à l'échelle d'un service entier, pas d'une machine.
 
 ### 3. Chiffrement de bout en bout
 
 Si le réseau interne est considéré hostile, tout flux doit être chiffré et authentifié,
 **y compris entre deux serveurs du même datacenter** : TLS 1.3 et, idéalement, TLS mutuel
-(mTLS) entre services, SSH à la place de TELNET, SNMPv3, Syslog sur TLS. Mon
-[write-up Wireshark](../../writeups/root-me-wireshark-pcap-identifiants/) montre concrètement ce
-qu'un attaquant lit lorsque ce principe n'est pas respecté.
+(mTLS) entre services, SSH à la place de Telnet, SNMPv3, Syslog sur TLS. Ma
+[pratique sur Root-Me](../../writeups/root-me-fondamentaux-reseau-protocoles-en-clair/) montre
+concrètement ce qui devient lisible lorsque ce principe n'est pas respecté.
 
 ### 4. Visibilité et analyse continues
 
