@@ -1,0 +1,45 @@
+---
+import { KeyRound, Mail, ShieldCheck } from '@lucide/astro';
+import BrandIcon from './BrandIcon.astro';
+import { SITE } from '@/config/site';
+import { url } from '@/utils/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-zinc-200 py-8 text-sm dark:border-zinc-800">
+  <div
+    class="container-page flex flex-col gap-4 text-zinc-500 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <p class="font-mono text-xs">
+      {`© ${year} ${SITE.author} · ${SITE.role}`}
+    </p>
+    <ul class="flex flex-wrap items-center gap-4">
+      <li>
+        <a href={SITE.github.url} rel="me noopener" class="flex items-center gap-1.5 hover:text-cyan-600">
+          <BrandIcon name="github" class="size-3.5" /> GitHub
+        </a>
+      </li>
+      <li>
+        <a href={SITE.linkedin.url} rel="me noopener" class="flex items-center gap-1.5 hover:text-cyan-600">
+          <BrandIcon name="linkedin" class="size-3.5" /> LinkedIn
+        </a>
+      </li>
+      <li>
+        <a href={`mailto:${SITE.email}`} class="flex items-center gap-1.5 hover:text-cyan-600">
+          <Mail class="size-3.5" aria-hidden="true" /> E-mail
+        </a>
+      </li>
+      <li>
+        <a href={url(SITE.pgp.file)} class="flex items-center gap-1.5 hover:text-cyan-600">
+          <KeyRound class="size-3.5" aria-hidden="true" /> Clé PGP
+        </a>
+      </li>
+      <li>
+        <a href={url('.well-known/security.txt')} class="flex items-center gap-1.5 hover:text-cyan-600">
+          <ShieldCheck class="size-3.5" aria-hidden="true" /> security.txt
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
