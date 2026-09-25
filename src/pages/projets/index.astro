@@ -1,0 +1,90 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import { formatDate, url } from '@/utils/url';
+
+const projets = (await getCollection('projets', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.ordre - b.data.ordre,
+);
+
+// Couverture du référentiel : compétences SISR mobilisées par l'ensemble des projets.
+const couverture = [...new Set(projets.flatMap((p) => p.data.competences))].sort();
+---
+
+<BaseLayout
+  title="Réalisations professionnelles E4/E5"
+  description="Fiches techniques détaillées des réalisations professionnelles présentées aux épreuves E4 et E5 du BTS SIO option SISR."
+>
+  <div class="container-page py-10">
+    <PageHeader
+      eyebrow="BTS SIO SISR · Épreuves E4 / E5"
+      title="Réalisations professionnelles"
+      intro="Chaque fiche documente une situation professionnelle réelle ou d'atelier : contexte, contraintes, topologie, implémentation commentée, recette et bilan. Les éléments issus du stage sont anonymisés."
+    />
+
+    <div class="mt-10 space-y-6">
+      {
+        projets.map((p) => (
+          <a href={url(`projets/${p.id}/`)} class="card card-link group block">
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-zinc-500">
+              <span class="badge badge-accent">{p.data.epreuve}</span>
+              <span>{p.data.cadre}</span>
+              <span aria-hidden="true">·</span>
+              <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time>
+            </div>
+            <h2 class="mt-3 text-lg font-semibold text-zinc-900 group-hover:text-cyan-700 dark:text-zinc-100 dark:group-hover:text-cyan-300">
+              {p.data.title}
+            </h2>
+            <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{p.data.description}</p>
+            <ul class="mt-4 flex flex-wrap gap-1.5">
+              {p.data.technologies.map((t) => (
+                <li class="badge">{t}</li>
+              ))}
+            </ul>
+          </a>
+        ))
+      }
+    </div>
+
+    <section class="mt-14" aria-labelledby="couverture">
+      <h2 id="couverture" class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Couverture du référentiel SISR
+      </h2>
+      <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        Compétences du bloc 1 (support et mise à disposition de services) et du bloc 2 SISR
+        (administration des systèmes et des réseaux) mobilisées dans les réalisations.
+      </p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full min-w-[36rem] text-left text-sm">
+          <thead class="font-mono text-xs text-zinc-500 uppercase">
+            <tr class="border-b border-zinc-200 dark:border-zinc-800">
+              <th class="py-2 pr-4 font-normal">Compétence</th>
+              {projets.map((p) => <th class="px-2 py-2 text-center font-normal">{p.data.epreuve}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              couverture.map((c) => (
+                <tr class="border-b border-zinc-100 dark:border-zinc-900">
+                  <td class="py-2 pr-4 text-zinc-700 dark:text-zinc-300">{c}</td>
+                  {projets.map((p) => (
+                    <td class="px-2 py-2 text-center font-mono text-cyan-700 dark:text-cyan-400">
+                      {p.data.competences.includes(c) ? (
+                        <span aria-label="couverte">■</span>
+                      ) : (
+                        <span class="text-zinc-300 dark:text-zinc-700" aria-label="non couverte">
+                          □
+                        </span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
