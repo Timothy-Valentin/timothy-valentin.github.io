@@ -1,5 +1,5 @@
 ---
-import { Mail, ShieldCheck } from '@lucide/astro';
+import { Flag, Mail } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import BrandIcon from '@/components/BrandIcon.astro';
@@ -11,7 +11,7 @@ type Canal = {
   value: string;
   href: string;
   hint: string;
-  icon: 'mail' | 'github' | 'linkedin';
+  icon: 'mail' | 'github' | 'linkedin' | 'rootme';
 };
 
 const canaux: Canal[] = [
@@ -19,9 +19,20 @@ const canaux: Canal[] = [
     label: 'E-mail',
     value: SITE.email,
     href: `mailto:${SITE.email}`,
-    hint: 'Canal privilégié pour toute proposition d’alternance.',
+    hint: 'Pour une proposition de stage ou d’alternance.',
     icon: 'mail',
   },
+  ...(SITE.linkedin
+    ? [
+        {
+          label: 'LinkedIn',
+          value: `linkedin.com/in/${SITE.linkedin.handle}`,
+          href: SITE.linkedin.url,
+          hint: 'Parcours professionnel.',
+          icon: 'linkedin' as const,
+        },
+      ]
+    : []),
   {
     label: 'GitHub',
     value: `github.com/${SITE.github.handle}`,
@@ -29,40 +40,36 @@ const canaux: Canal[] = [
     hint: 'Code source de ce portfolio.',
     icon: 'github',
   },
+  {
+    label: 'Root-Me',
+    value: `root-me.org/${SITE.rootme.handle}`,
+    href: SITE.rootme.url,
+    hint: 'Profil d’entraînement à la cybersécurité.',
+    icon: 'rootme',
+  },
 ];
-if (SITE.linkedin) {
-  canaux.push({
-    label: 'LinkedIn',
-    value: `linkedin.com/in/${SITE.linkedin.handle}`,
-    href: SITE.linkedin.url,
-    hint: 'Parcours et recherche d’alternance.',
-    icon: 'linkedin',
-  });
-}
 ---
 
 <BaseLayout
   title="Contact"
-  description="Contacter Timothy Valentin, étudiant en BTS SIO SISR à la recherche d'une alternance en cybersécurité."
+  description="Contacter Timothy Valentin, étudiant en BTS SIO SISR à la recherche d'un stage de 2e année et d'une alternance en cybersécurité."
 >
   <div class="container-page max-w-3xl py-10">
     <PageHeader
       eyebrow="Contact"
       title="Me contacter"
-      intro="Pour une proposition d'alternance ou un échange sur mon parcours, le plus simple est de m'écrire par e-mail."
+      intro="Pour une proposition de stage, d'alternance ou un échange sur mon parcours, le plus simple est de m'écrire par e-mail."
     />
 
     <ul class="mt-10 divide-y divide-slate-200 border-y border-slate-200 dark:divide-slate-800 dark:border-slate-800">
       {
         canaux.map((c) => (
           <li>
-            <a
-              href={c.href}
-              rel={c.icon === 'mail' ? undefined : 'me noopener'}
-              class="group flex items-center gap-4 py-4"
-            >
+            <a href={c.href} rel={c.icon === 'mail' ? undefined : 'me noopener'} class="group flex items-center gap-4 py-4">
               <span class="flex size-10 shrink-0 items-center justify-center rounded-md border border-slate-200 text-brand-700 dark:border-slate-800 dark:text-brand-300">
-                {c.icon === 'mail' ? <Mail class="size-4" aria-hidden="true" /> : <BrandIcon name={c.icon} />}
+                {c.icon === 'mail' && <Mail class="size-4" aria-hidden="true" />}
+                {c.icon === 'rootme' && <Flag class="size-4" aria-hidden="true" />}
+                {(c.icon === 'github' || c.icon === 'linkedin') && <BrandIcon name={c.icon} />}
               </span>
               <span class="min-w-0">
                 <span class="block text-xs text-slate-500 uppercase">{c.label}</span>
@@ -77,18 +84,9 @@ if (SITE.linkedin) {
       }
     </ul>
 
-    <section class="mt-10 card" aria-labelledby="divulgation">
-      <h2 id="divulgation" class="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-        <ShieldCheck class="size-4 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-        Signalement de sécurité
-      </h2>
-      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-        Ce site est statique (aucune base de données, aucun cookie, aucun script tiers). Pour
-        signaler un problème de sécurité, les modalités sont publiées dans le fichier{' '}
-        <a href={url('.well-known/security.txt')} class="font-mono text-brand-700 hover:underline dark:text-brand-300"
-          >/.well-known/security.txt</a
-        >{' '}(RFC 9116).
-      </p>
-    </section>
+    <p class="mt-8 text-sm text-slate-500">
+      Signalement d'un problème de sécurité sur ce site :{' '}
+      <a href={url('.well-known/security.txt')} class="link font-mono">security.txt</a>{' '}(RFC 9116).
+    </p>
   </div>
 </BaseLayout>

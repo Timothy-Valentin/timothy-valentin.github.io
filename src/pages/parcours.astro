@@ -1,0 +1,161 @@
+---
+import { Award, Briefcase, Download, GraduationCap, Search } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import { SITE } from '@/config/site';
+import { url } from '@/utils/url';
+
+const formation = [
+  {
+    titre: 'BTS SIO — option SISR',
+    lieu: SITE.ecole,
+    periode: '2025 – 2027',
+    detail: '2e année en cours. Solutions d’Infrastructure, Systèmes et Réseaux.',
+  },
+  {
+    titre: 'Licence Métiers de la forme',
+    lieu: null,
+    periode: null,
+    detail: 'Activité de préparateur physique.',
+  },
+  {
+    titre: 'DEUST Métiers de la forme',
+    lieu: null,
+    periode: null,
+    detail: 'Activité de coach sportif.',
+  },
+];
+
+const experiences = [
+  {
+    titre: 'Stage de 1re année — Ministère de la Justice (DIT)',
+    lieu: 'Toulouse (Jolimont)',
+    periode: 'Mai – juin 2026 · 5 semaines',
+    detail:
+      'Recueil des besoins et proposition d’infrastructure pour un bâtiment judiciaire, soutenance devant un jury de spécialistes, maquette physique et résolution de pannes réseau.',
+    lien: 'realisations/deploiement-reseau-nouveau-batiment-justice/',
+  },
+  {
+    titre: 'Préparateur physique',
+    lieu: null,
+    periode: null,
+    detail: 'Pendant la licence Métiers de la forme.',
+    lien: null,
+  },
+  {
+    titre: 'Coach sportif',
+    lieu: null,
+    periode: null,
+    detail: 'Pendant le DEUST Métiers de la forme.',
+    lien: null,
+  },
+];
+---
+
+<BaseLayout
+  title="Parcours"
+  description="Parcours de Timothy Valentin : BTS SIO SISR au lycée Henri Matisse de Cugnaux après une première carrière dans les métiers de la forme, stage au Ministère de la Justice."
+>
+  <div class="container-page max-w-3xl py-10">
+    <PageHeader
+      eyebrow="Parcours"
+      title="Une reconversion vers l'informatique"
+      intro="Après un DEUST puis une licence Métiers de la forme, et une activité de coach sportif puis de préparateur physique, je me suis orienté vers l'administration des systèmes et des réseaux. Ma première carrière m'a appris à analyser un besoin, à organiser une progression et à accompagner des personnes : des réflexes que je retrouve dans le support aux utilisateurs et la gestion de projet."
+    >
+      {
+        SITE.cv && (
+          <a href={url(SITE.cv)} download class="btn btn-primary mt-5">
+            <Download class="size-4" aria-hidden="true" /> Télécharger mon CV (PDF)
+          </a>
+        )
+      }
+    </PageHeader>
+
+    <section class="mt-10" aria-labelledby="recherche">
+      <div class="card border-brand-200 bg-brand-50/60 dark:border-brand-400/30 dark:bg-brand-400/5">
+        <h2 id="recherche" class="flex items-center gap-2 font-semibold text-brand-800 dark:text-brand-300">
+          <Search class="size-4" aria-hidden="true" /> Je recherche
+        </h2>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+          {SITE.recherche.map((r) => <li>{r}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="mt-12" aria-labelledby="formation">
+      <h2 id="formation" class="h2 flex items-center gap-2">
+        <GraduationCap class="size-6 text-brand-700 dark:text-brand-300" aria-hidden="true" /> Formation
+      </h2>
+      <ol class="mt-6 space-y-6 border-l-2 border-slate-200 pl-6 dark:border-slate-800">
+        {
+          formation.map((f, i) => (
+            <li class="relative">
+              <span
+                class:list={[
+                  'absolute top-1.5 -left-[1.95rem] size-3 rounded-full border-2 border-white dark:border-slate-950',
+                  i === 0 ? 'bg-brand-700 dark:bg-brand-300' : 'bg-slate-300 dark:bg-slate-600',
+                ]}
+                aria-hidden="true"
+              />
+              <p class="font-semibold text-slate-900 dark:text-slate-100">{f.titre}</p>
+              {(f.lieu || f.periode) && (
+                <p class="text-sm text-slate-500">{[f.lieu, f.periode].filter(Boolean).join(' · ')}</p>
+              )}
+              <p class="mt-1 text-sm text-slate-700 dark:text-slate-400">{f.detail}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-12" aria-labelledby="experience">
+      <h2 id="experience" class="h2 flex items-center gap-2">
+        <Briefcase class="size-6 text-brand-700 dark:text-brand-300" aria-hidden="true" /> Expérience
+      </h2>
+      <ol class="mt-6 space-y-6 border-l-2 border-slate-200 pl-6 dark:border-slate-800">
+        {
+          experiences.map((e, i) => (
+            <li class="relative">
+              <span
+                class:list={[
+                  'absolute top-1.5 -left-[1.95rem] size-3 rounded-full border-2 border-white dark:border-slate-950',
+                  i === 0 ? 'bg-brand-700 dark:bg-brand-300' : 'bg-slate-300 dark:bg-slate-600',
+                ]}
+                aria-hidden="true"
+              />
+              <p class="font-semibold text-slate-900 dark:text-slate-100">{e.titre}</p>
+              {(e.lieu || e.periode) && (
+                <p class="text-sm text-slate-500">{[e.lieu, e.periode].filter(Boolean).join(' · ')}</p>
+              )}
+              <p class="mt-1 text-sm text-slate-700 dark:text-slate-400">{e.detail}</p>
+              {e.lien && (
+                <a href={url(e.lien)} class="link mt-1 inline-block text-sm">
+                  Voir la fiche de réalisation →
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-12" aria-labelledby="certifications">
+      <h2 id="certifications" class="h2 flex items-center gap-2">
+        <Award class="size-6 text-brand-700 dark:text-brand-300" aria-hidden="true" /> Certifications et entraînement
+      </h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+        <li class="card">
+          <p class="font-semibold text-slate-900 dark:text-slate-100">Introduction to Cybersecurity</p>
+          <p class="text-sm text-slate-500">Cisco Networking Academy · badge d'initiation (6 h)</p>
+        </li>
+        <li class="card">
+          <p class="font-semibold text-slate-900 dark:text-slate-100">Root-Me — pseudo « {SITE.rootme.handle} »</p>
+          <p class="text-sm text-slate-500">8 challenges validés, catégorie Réseau</p>
+          <a href={url('realisations/root-me-analyse-protocoles-en-clair/')} class="link mt-1 inline-block text-sm">
+            Voir la fiche →
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

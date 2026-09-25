@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import EntryCard from '@/components/EntryCard.astro';
+import { CONTEXTES, type Contexte } from '@/config/referentiel';
+import { url } from '@/utils/url';
+
+const toutes = (await getCollection('realisations', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.ordre - b.data.ordre,
+);
+
+const sections = (Object.keys(CONTEXTES) as Contexte[])
+  .map((c) => ({ id: c, titre: CONTEXTES[c], items: toutes.filter((r) => r.data.contexte === c) }))
+  .filter((s) => s.items.length > 0);
+---
+
+<BaseLayout
+  title="Réalisations"
+  description="Réalisations de Timothy Valentin en BTS SIO SISR : stage au Ministère de la Justice, infrastructure réseau complète sous Proxmox, modélisation Packet Tracer, pratique Root-Me."
+>
+  <div class="container-page py-10">
+    <PageHeader
+      eyebrow="Réalisations"
+      title="Ce que j'ai réalisé"
+      intro="Chaque fiche suit le même plan : contexte, objectifs, démarche, résultat et compétences du référentiel mobilisées. Le tableau de synthèse relie chaque compétence aux réalisations qui la démontrent."
+    >
+      <a href={url('competences/')} class="btn btn-ghost mt-5">Voir le tableau de synthèse des compétences</a>
+    </PageHeader>
+
+    {
+      sections.map((s) => (
+        <section class="mt-12" aria-labelledby={`ctx-${s.id}`}>
+          <h2 id={`ctx-${s.id}`} class="h2">
+            {s.titre}
+          </h2>
+          <div class="mt-5 grid gap-4 md:grid-cols-2">
+            {s.items.map((r) => (
+              <EntryCard
+                href={url(`realisations/${r.id}/`)}
+                title={r.data.title}
+                description={r.data.description}
+                label={r.data.cadre}
+                meta={r.data.periode}
+                tags={r.data.outils}
+              />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>

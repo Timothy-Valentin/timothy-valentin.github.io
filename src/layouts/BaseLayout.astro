@@ -1,6 +1,4 @@
 ---
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/700.css';
 import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -11,11 +9,9 @@ interface Props {
   title?: string;
   description?: string;
   type?: 'website' | 'article';
-  /** Désactive l'indexation Pagefind (pages utilitaires). */
-  noindex?: boolean;
 }
 
-const { title, description = SITE.description, type = 'website', noindex = false } = Astro.props;
+const { title, description = SITE.description, type = 'website' } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.author}` : SITE.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -32,19 +28,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
     <link rel="sitemap" href={url('sitemap-index.xml')} />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="fr_FR" />
-    <meta name="generator" content={Astro.generator} />
     <script is:inline>
       // Thème clair par défaut ; le mode sombre n'est appliqué que sur choix explicite du visiteur.
       try {
-        if (localStorage.getItem('theme') === 'dark') {
-          document.documentElement.classList.add('dark');
-        }
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
       } catch (_) {}
     </script>
   </head>
@@ -55,14 +47,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       >Aller au contenu</a
     >
     <Header />
-    <main id="contenu" class="flex-1" data-pagefind-body={noindex ? undefined : ''}>
+    <main id="contenu" class="flex-1">
       <slot />
     </main>
     <Footer />
-
-    <script>
-      import { initMermaid } from '@/scripts/mermaid';
-      initMermaid();
-    </script>
   </body>
 </html>

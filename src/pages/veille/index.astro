@@ -11,58 +11,48 @@ const fiches = (await getCollection('veille', ({ data }) => !data.draft)).sort(
 ---
 
 <BaseLayout
-  title="Veille technologique et réglementaire"
-  description="Veille BTS SIO : l'architecture Zero Trust (NIST SP 800-207) appliquée aux réseaux d'entreprises et d'administrations, impact de NIS 2, méthodologie et outils de veille."
+  title="Veille technologique"
+  description="Veille technologique et réglementaire de Timothy Valentin : l'architecture Zero Trust (NIST SP 800-207), la directive NIS 2, et la méthode de veille suivie (flux RSS, ANSSI, CERT-FR)."
 >
   <div class="container-page py-10">
     <PageHeader
-      eyebrow="Veille technologique & réglementaire"
-      title="Architecture Zero Trust"
-      intro="Du modèle périmétrique au principe « Ne jamais faire confiance, toujours vérifier » : comment les réseaux d'entreprises et d'administrations basculent vers le Zero Trust, et pourquoi la directive NIS 2 accélère ce mouvement."
+      eyebrow="Veille technologique et réglementaire"
+      title="L'architecture Zero Trust"
+      intro="Du modèle périmétrique au principe « ne jamais faire confiance, toujours vérifier » : comment les réseaux des entreprises et des administrations évoluent, et pourquoi la directive NIS 2 accélère ce mouvement."
     />
 
-    <section class="mt-10 grid gap-4 md:grid-cols-2" aria-label="Fiches de veille">
+    <section class="mt-10 rounded-lg border-l-4 border-brand-700 bg-slate-50 p-5 dark:border-brand-300 dark:bg-slate-900" aria-labelledby="problematique">
+      <h2 id="problematique" class="text-sm font-semibold text-brand-800 dark:text-brand-300">Problématique</h2>
+      <p class="mt-2 text-slate-700 dark:text-slate-300">
+        Avec le télétravail, le cloud et les attaques qui ciblent les administrations, le modèle du
+        « château fort » suffit-il encore ? Et comment un administrateur systèmes et réseaux peut-il
+        amorcer une démarche Zero Trust sur une infrastructure existante ?
+      </p>
+    </section>
+
+    <section class="mt-8 grid gap-4 md:grid-cols-2" aria-label="Fiches de veille">
       {
         fiches.map((f) => {
           const Icon = f.data.type === 'synthese' ? BookOpen : Rss;
           return (
             <a href={url(`veille/${f.id}/`)} class="card card-link group flex flex-col">
-              <div class="flex items-center justify-between font-mono text-xs text-slate-500">
+              <div class="flex items-center justify-between text-xs text-slate-500">
                 <span class="badge badge-accent">
-                  {f.data.type === 'synthese' ? 'Fiche de synthèse' : 'Méthodologie'}
+                  {f.data.type === 'synthese' ? 'Fiche de synthèse' : 'Méthode de veille'}
                 </span>
-                <time datetime={(f.data.miseAJour ?? f.data.date).toISOString()}>
-                  {formatDate(f.data.miseAJour ?? f.data.date)}
-                </time>
+                <span>
+                  Mise à jour le <time datetime={f.data.miseAJour.toISOString()}>{formatDate(f.data.miseAJour)}</time>
+                </span>
               </div>
-              <Icon class="mt-4 size-5 text-brand-600 dark:text-brand-400" aria-hidden="true" />
+              <Icon class="mt-4 size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
               <h2 class="mt-2 font-semibold text-slate-900 group-hover:text-brand-700 dark:text-slate-100 dark:group-hover:text-brand-300">
                 {f.data.title}
               </h2>
               <p class="mt-2 flex-1 text-sm text-slate-600 dark:text-slate-400">{f.data.description}</p>
-              <ul class="mt-4 flex flex-wrap gap-1.5">
-                {f.data.tags.slice(0, 5).map((t) => (
-                  <li class="badge">{t}</li>
-                ))}
-              </ul>
             </a>
           );
         })
       }
-    </section>
-
-    <section class="mt-12 card" aria-labelledby="problematique">
-      <h2 id="problematique" class="font-semibold text-slate-900 dark:text-slate-100">
-        Problématique de veille
-      </h2>
-      <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
-        <em>
-          Dans un contexte de télétravail généralisé, d'adoption du cloud et de menaces ciblant les
-          administrations (rançongiciels, compromission d'identités), le modèle « château fort »
-          suffit-il encore — et comment un administrateur SISR peut-il amorcer concrètement une
-          transition Zero Trust sur une infrastructure existante ?
-        </em>
-      </p>
     </section>
   </div>
 </BaseLayout>

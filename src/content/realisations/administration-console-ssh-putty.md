@@ -1,14 +1,20 @@
 ---
-title: "Méthodologie d'administration et accès console"
-description: "Utilisation de PuTTY pour administrer des équipements et des serveurs : liaison série en console pour la configuration initiale des équipements réseau, et SSH pour la gestion distante sécurisée."
-date: 2026-04-18
-tags:
-  - PuTTY
-  - Console série
-  - SSH
-  - Cisco IOS
-  - Administration à distance
-ordre: 2
+title: "Administrer les équipements en console série et en SSH avec PuTTY"
+court: "PuTTY"
+description: "Méthode d'administration utilisée au quotidien : liaison série en console pour la configuration initiale et le dépannage des équipements réseau, SSH pour la gestion à distance sécurisée, et bonnes pratiques associées."
+contexte: formation
+cadre: "BTS SIO SISR — formation et stage"
+periode: "Pratique quotidienne"
+competences:
+  - exploiter
+  - usages
+  - infra
+outils:
+  - "PuTTY"
+  - "Console série"
+  - "SSH"
+  - "Syntaxe Cisco IOS"
+ordre: 5
 ---
 
 ## PuTTY, l'outil d'administration du quotidien
@@ -26,7 +32,7 @@ sur un équipement ou un serveur. Je l'utilise dans deux situations bien distinc
 L'accès console est l'accès **« hors bande »** : il ne dépend pas du réseau. C'est le seul
 moyen de configurer un commutateur ou un routeur neuf, et le recours ultime quand une erreur de
 configuration a coupé l'accès réseau. Je l'ai utilisé en permanence sur la maquette de
-[mon stage](../../projets/deploiement-reseau-nouveau-batiment-justice/).
+[mon stage](../deploiement-reseau-nouveau-batiment-justice/).
 
 ### Procédure
 
@@ -60,7 +66,7 @@ Une fois l'équipement ou le serveur joignable sur le réseau, l'administration 
 **SSH**, qui **chiffre** l'intégralité de la session : identifiants et commandes ne circulent
 jamais en clair. À l'inverse, **Telnet** transmet tout en clair et ne doit plus être utilisé —
 ce que j'ai pu constater concrètement en analysant des captures réseau sur
-[Root-Me](../../writeups/root-me-fondamentaux-reseau-protocoles-en-clair/).
+[Root-Me](../root-me-analyse-protocoles-en-clair/).
 
 ### Procédure dans PuTTY
 

@@ -2,7 +2,7 @@
 # Contact pour le signalement d'un problème de sécurité sur ce portfolio.
 
 Contact: mailto:timothy.valentins@gmail.com
-Expires: 2027-09-24T22:00:00.000Z
+Expires: 2027-09-25T22:00:00.000Z
 Preferred-Languages: fr, en
-Canonical: https://timothy-valentin.github.io/portfolio/.well-known/security.txt
-Policy: https://timothy-valentin.github.io/portfolio/contact/
+Canonical: https://timothy-valentin.github.io/.well-known/security.txt
+Policy: https://timothy-valentin.github.io/contact/

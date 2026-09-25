@@ -1,48 +1,52 @@
 ---
 import { getCollection } from 'astro:content';
-import { Award, ArrowRight, BookOpen, Mail, Network, Server, ShieldCheck, Wrench } from '@lucide/astro';
+import { ArrowRight, BookOpen, Download, Mail, Network, Server, ShieldCheck, TableProperties } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import EntryCard from '@/components/EntryCard.astro';
 import BrandIcon from '@/components/BrandIcon.astro';
 import { SITE } from '@/config/site';
-import { byDateDesc, url } from '@/utils/url';
+import { CONTEXTES } from '@/config/referentiel';
+import { url } from '@/utils/url';
 
-const projets = (await getCollection('projets', ({ data }) => !data.draft)).sort(
+const realisations = (await getCollection('realisations', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.ordre - b.data.ordre,
 );
-const writeups = (await getCollection('writeups', ({ data }) => !data.draft)).sort(byDateDesc);
 
 const blocs = [
   {
     icon: Network,
     titre: 'Réseau',
     items: [
-      'Commutation et VLAN 802.1Q',
-      'Routage inter-VLAN (router-on-a-stick, sous-interfaces 802.1Q)',
-      'DHCP : étendues, exclusions et relais',
-      'Modélisation sur Cisco Packet Tracer',
-      'Configuration en console via PuTTY (syntaxe Cisco IOS)',
-      'Diagnostic et résolution d’incidents par la méthode des couches OSI',
+      'VLAN 802.1Q et routage inter-VLAN',
+      'DHCP : étendues, exclusions, relais',
+      'Pare-feu pfSense',
+      'Cisco Packet Tracer au quotidien',
+      'Configuration en console avec PuTTY',
+      'Diagnostic de pannes par couches OSI',
     ],
   },
   {
     icon: Server,
-    titre: 'Système & Virtualisation',
+    titre: 'Systèmes & virtualisation',
     items: [
-      'Proxmox VE : montage matériel et installation de l’OS',
-      'VirtualBox',
-      'Windows Server : AD DS, DNS, GPO',
-      'Linux : Debian, Ubuntu, Kali Linux',
+      'Proxmox VE au quotidien, VirtualBox',
+      'Windows Server : AD DS, DNS, DHCP, GPO',
+      'Clients Windows et Ubuntu',
+      'Mise en place de sauvegardes',
+      'Linux : Debian, Ubuntu, Kali',
+      'Remise en service de serveurs',
     ],
   },
   {
     icon: ShieldCheck,
     titre: 'Cybersécurité',
     items: [
-      'Badge Cisco Networking Academy « Introduction to Cybersecurity »',
-      'Challenges réseau Root-Me (analyse de protocoles en clair)',
-      'Principes de l’architecture Zero Trust (veille)',
-      'Durcissement de base des accès et des sessions',
+      'Badge Cisco « Introduction to Cybersecurity »',
+      'Root-Me : 8 challenges Réseau validés',
+      'Analyse de trames avec Wireshark',
+      'Protocoles chiffrés (SSH, HTTPS, SFTP)',
+      'Sécurisation des sessions par GPO',
+      'Veille : architecture Zero Trust, NIS 2',
     ],
   },
 ];
@@ -57,53 +61,49 @@ const blocs = [
         {SITE.author}
       </h1>
       <p class="mt-5 max-w-2xl text-lg text-slate-700 dark:text-slate-300">
-        Étudiant en BTS Services Informatiques aux Organisations, option Solutions d’Infrastructure,
-        Systèmes et Réseaux. Je m’intéresse à l’administration des réseaux et des systèmes, et à leur
-        sécurisation.
-      </p>
-      <p class="mt-3 max-w-2xl text-slate-600 dark:text-slate-400">
-        Je recherche une <strong class="text-slate-900 dark:text-slate-100">poursuite d’études en alternance dans la cybersécurité</strong>,
-        avec pour objectif les métiers d’analyste SOC junior ou d’administrateur systèmes et réseaux sécurisés.
+        En reconversion après une première carrière dans les métiers de la forme, je me forme à
+        l'administration des systèmes et des réseaux au lycée Henri Matisse de Cugnaux, et je
+        m'oriente vers la cybersécurité.
       </p>
 
+      <div class="mt-6 max-w-2xl rounded-lg border border-brand-200 bg-white p-4 dark:border-brand-400/30 dark:bg-slate-900">
+        <p class="text-sm font-semibold text-brand-800 dark:text-brand-300">Je recherche</p>
+        <ul class="mt-1 list-disc space-y-0.5 pl-5 text-sm text-slate-700 dark:text-slate-300">
+          {SITE.recherche.map((r) => <li>{r}</li>)}
+        </ul>
+      </div>
+
       <div class="mt-8 flex flex-wrap gap-3">
-        <a href={url('projets/')} class="btn btn-primary">
-          Réalisations E4/E5 <ArrowRight class="size-4" aria-hidden="true" />
+        <a href={url('realisations/')} class="btn btn-primary">
+          Mes réalisations <ArrowRight class="size-4" aria-hidden="true" />
         </a>
+        <a href={url('competences/')} class="btn btn-ghost">
+          <TableProperties class="size-4" aria-hidden="true" /> Tableau des compétences
+        </a>
+        {
+          SITE.cv && (
+            <a href={url(SITE.cv)} download class="btn btn-ghost">
+              <Download class="size-4" aria-hidden="true" /> CV
+            </a>
+          )
+        }
         <a href={url('contact/')} class="btn btn-ghost">
-          <Mail class="size-4" aria-hidden="true" /> Me contacter
+          <Mail class="size-4" aria-hidden="true" /> Contact
         </a>
         <a href={SITE.github.url} rel="me noopener" class="btn btn-ghost">
           <BrandIcon name="github" /> GitHub
         </a>
       </div>
-
-      <dl class="mt-10 grid max-w-3xl gap-4 text-sm sm:grid-cols-3">
-        <div class="border-l-2 border-brand-700 pl-3 dark:border-brand-300">
-          <dt class="text-slate-500">Formation</dt>
-          <dd class="mt-1 font-medium text-slate-900 dark:text-slate-100">BTS SIO — option SISR</dd>
-        </div>
-        <div class="border-l-2 border-brand-700 pl-3 dark:border-brand-300">
-          <dt class="text-slate-500">Stage de 1re année</dt>
-          <dd class="mt-1 font-medium text-slate-900 dark:text-slate-100">Ministère de la Justice — DIT</dd>
-        </div>
-        <div class="border-l-2 border-brand-700 pl-3 dark:border-brand-300">
-          <dt class="text-slate-500">Projet</dt>
-          <dd class="mt-1 font-medium text-slate-900 dark:text-slate-100">Alternance en cybersécurité</dd>
-        </div>
-      </dl>
     </div>
   </section>
 
   <!-- Compétences -->
   <section class="container-page py-14" aria-labelledby="competences">
     <p class="eyebrow">Compétences</p>
-    <h2 id="competences" class="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-      Compétences mises en œuvre
-    </h2>
+    <h2 id="competences" class="h2 mt-2">Ce que je sais faire</h2>
     <p class="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-      Chaque compétence listée a été pratiquée en stage, en atelier de formation ou sur mon homelab,
-      et se retrouve dans au moins une fiche de ce portfolio.
+      Uniquement des compétences pratiquées en stage, en formation ou en autonomie, et démontrées
+      dans les fiches de réalisation.
     </p>
     <div class="mt-8 grid gap-4 md:grid-cols-3">
       {
@@ -125,91 +125,48 @@ const blocs = [
         ))
       }
     </div>
-
-    <div class="mt-4 grid gap-4 md:grid-cols-2">
-      <div class="card">
-        <h3 class="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-          <Award class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-          Certification
-        </h3>
-        <ul class="mt-3 space-y-1 text-sm text-slate-700 dark:text-slate-400">
-          {
-            SITE.certifications.map((c) => (
-              <li>
-                <span class="font-medium text-slate-900 dark:text-slate-100">{c.titre}</span> — {c.organisme}
-                <span class="text-slate-500"> · {c.detail}</span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div class="card">
-        <h3 class="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-          <Wrench class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-          Outils utilisés au quotidien
-        </h3>
-        <ul class="mt-3 flex flex-wrap gap-2">
-          {SITE.outils.map((o) => <li class="badge">{o}</li>)}
-        </ul>
-      </div>
-    </div>
   </section>
 
-  <!-- Projets -->
-  <section class="container-page py-8" aria-labelledby="projets">
+  <!-- Réalisations -->
+  <section class="container-page py-4" aria-labelledby="realisations">
     <div class="flex items-end justify-between gap-4">
       <div>
-        <p class="eyebrow">Réalisations professionnelles</p>
-        <h2 id="projets" class="mt-2 text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
-          Projets E4 / E5
-        </h2>
+        <p class="eyebrow">Réalisations</p>
+        <h2 id="realisations" class="h2 mt-2">Stage, formation et projets personnels</h2>
       </div>
-      <a href={url('projets/')} class="shrink-0 text-sm text-brand-700 hover:underline dark:text-brand-300">
-        Toutes les réalisations →
-      </a>
+      <a href={url('realisations/')} class="link shrink-0 text-sm">Tout voir →</a>
     </div>
     <div class="mt-6 grid gap-4 md:grid-cols-2">
       {
-        projets.map((p) => (
+        realisations.slice(0, 4).map((r) => (
           <EntryCard
-            href={url(`projets/${p.id}/`)}
-            title={p.data.title}
-            description={p.data.description}
-            date={p.data.date}
-            label={p.data.epreuve}
-            tags={p.data.technologies}
+            href={url(`realisations/${r.id}/`)}
+            title={r.data.title}
+            description={r.data.description}
+            label={CONTEXTES[r.data.contexte]}
+            meta={r.data.periode}
+            tags={r.data.outils}
           />
         ))
       }
     </div>
   </section>
 
-  <!-- Autres sections -->
-  <section class="container-page py-8" aria-label="Autres sections">
-    <div class="grid gap-4 sm:grid-cols-3">
-      <a href={url('homelab/')} class="card card-link">
-        <Server class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-        <h3 class="mt-3 font-semibold text-slate-900 dark:text-slate-100">Homelab</h3>
+  <!-- Accès rapides -->
+  <section class="container-page py-10" aria-label="Accès rapides">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <a href={url('competences/')} class="card card-link">
+        <TableProperties class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+        <h3 class="mt-3 font-semibold text-slate-900 dark:text-slate-100">Tableau de synthèse</h3>
         <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Serveur Proxmox VE monté et installé par mes soins, VirtualBox, accès console avec PuTTY.
+          Chaque compétence du référentiel BTS SIO reliée aux réalisations qui la démontrent.
         </p>
       </a>
-      {
-        writeups[0] && (
-          <a href={url(`writeups/${writeups[0].id}/`)} class="card card-link">
-            <ShieldCheck class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-            <h3 class="mt-3 font-semibold text-slate-900 dark:text-slate-100">Pratique Root-Me</h3>
-            <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Analyse de protocoles en clair avec Wireshark et préconisations de sécurisation.
-            </p>
-          </a>
-        )
-      }
       <a href={url('veille/')} class="card card-link">
         <BookOpen class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
         <h3 class="mt-3 font-semibold text-slate-900 dark:text-slate-100">Veille technologique</h3>
         <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Architecture Zero Trust, NIST SP 800-207 et directive NIS 2.
+          L'architecture Zero Trust (NIST SP 800-207) et la directive NIS 2.
         </p>
       </a>
     </div>

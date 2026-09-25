@@ -1,8 +1,7 @@
 ---
 title: "Méthodologie et outils de veille"
 description: "La démarche de veille technologique et réglementaire mise en place dans le cadre du BTS SIO : définition du sujet, sources institutionnelles (ANSSI, CERT-FR), agrégation des flux RSS, tri, vérification et restitution."
-date: 2025-10-06
-miseAJour: 2026-09-12
+miseAJour: 2026-09-26
 type: methodologie
 tags:
   - Méthodologie
@@ -35,14 +34,13 @@ poursuite d'études en cybersécurité.
 
 ## La démarche en cinq étapes
 
-```mermaid
-flowchart LR
-    A["1 · Définir<br/>sujet et mots-clés"] --> B["2 · Collecter<br/>flux RSS, sources officielles"]
-    B --> C["3 · Trier<br/>pertinence"]
-    C --> D["4 · Vérifier<br/>source primaire, recoupement"]
-    D --> E["5 · Restituer<br/>fiche de synthèse"]
-    E -. "nouveaux mots-clés" .-> A
-```
+| Étape | Objectif |
+| --- | --- |
+| **1. Définir** | Délimiter le sujet et choisir les mots-clés |
+| **2. Collecter** | Recevoir automatiquement les publications des sources choisies (flux RSS) |
+| **3. Trier** | Ne garder que ce qui concerne le sujet |
+| **4. Vérifier** | Remonter à la source primaire, recouper, contrôler la date |
+| **5. Restituer** | Rédiger et mettre à jour la fiche de synthèse |
 
 ### 1. Définir le sujet et les mots-clés
 

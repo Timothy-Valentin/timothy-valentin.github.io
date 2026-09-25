@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 270" font-family="Segoe UI, system-ui, Arial, sans-serif" role="img" aria-label="Schéma de principe de la maquette de validation : réseau distant, pare-feu, routeur, deux commutateurs, postes de test, et poste d'administration relié en console">
+  <rect width="820" height="270" fill="#ffffff"/>
+  <g stroke="#64748b" stroke-width="2" fill="none">
+    <line x1="130" y1="68" x2="150" y2="68"/>
+    <line x1="265" y1="68" x2="285" y2="68"/>
+    <line x1="400" y1="68" x2="420" y2="68"/>
+    <line x1="535" y1="68" x2="555" y2="68"/>
+    <line x1="670" y1="68" x2="690" y2="68"/>
+    <line x1="477" y1="96" x2="477" y2="190" stroke-dasharray="6 5"/>
+  </g>
+  <g font-size="14" text-anchor="middle">
+    <rect x="15" y="40" width="115" height="56" rx="28" fill="#f8fafc" stroke="#64748b" stroke-dasharray="5 4"/>
+    <text x="72" y="73" fill="#0f172a">Réseau distant</text>
+
+    <rect x="150" y="40" width="115" height="56" rx="8" fill="#eef3fa" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="207" y="73" fill="#0f172a" font-weight="600">Pare-feu</text>
+
+    <rect x="285" y="40" width="115" height="56" rx="8" fill="#eef3fa" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="342" y="73" fill="#0f172a" font-weight="600">Routeur</text>
+
+    <rect x="420" y="40" width="115" height="56" rx="8" fill="#eef3fa" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="477" y="73" fill="#0f172a" font-weight="600">Commutateur</text>
+
+    <rect x="555" y="40" width="115" height="56" rx="8" fill="#eef3fa" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="612" y="73" fill="#0f172a" font-weight="600">Commutateur</text>
+
+    <rect x="690" y="40" width="115" height="56" rx="8" fill="#ffffff" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="747" y="73" fill="#0f172a">Postes de test</text>
+
+    <rect x="392" y="190" width="170" height="60" rx="8" fill="#ffffff" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="477" y="215" fill="#0f172a" font-weight="600">Poste d'administration</text>
+    <text x="477" y="236" fill="#475569" font-size="13">PuTTY</text>
+  </g>
+  <text x="490" y="148" font-size="13" fill="#475569">câble console (liaison série)</text>
+  <text x="15" y="245" font-size="12" fill="#94a3b8">Schéma de principe</text>
+</svg>

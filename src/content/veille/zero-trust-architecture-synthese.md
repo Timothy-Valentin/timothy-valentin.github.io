@@ -1,8 +1,7 @@
 ---
 title: "L'architecture Zero Trust (ZTA) appliquée aux réseaux d'entreprises et d'administrations"
 description: "Du modèle périmétrique au principe « Ne jamais faire confiance, toujours vérifier » : définition NIST SP 800-207, piliers (identité, micro-segmentation, chiffrement de bout en bout), comparaison avec les réseaux périmétriques et impact de la directive NIS 2."
-date: 2025-11-15
-miseAJour: 2026-09-12
+miseAJour: 2026-09-26
 type: synthese
 tags:
   - Zero Trust
@@ -31,7 +30,7 @@ ordre: 1
 
 ## Pourquoi ce sujet de veille ?
 
-En formation comme pendant mon [stage au Ministère de la Justice](../../projets/deploiement-reseau-nouveau-batiment-justice/),
+En formation comme pendant mon [stage au Ministère de la Justice](../../realisations/deploiement-reseau-nouveau-batiment-justice/),
 j'ai travaillé sur des architectures classiques : des VLAN, des routeurs, des pare-feu en
 périphérie. Ce modèle repose sur une hypothèse implicite : **ce qui est à l'intérieur est
 digne de confiance**. Or les incidents majeurs des dernières années (rançongiciels dans des
@@ -43,21 +42,6 @@ lequel évoluent les administrations et les entreprises, et la directive **NIS 2
 ce mouvement.
 
 ## Du modèle périmétrique au Zero Trust
-
-```mermaid
-flowchart LR
-    subgraph P["Modèle périmétrique — « château fort »"]
-        direction TB
-        ext1(("Extérieur<br/>non fiable")) -- "pare-feu" --> int1["Intérieur<br/>considéré fiable"]
-        int1 --> r1["Toutes les ressources<br/>accessibles une fois entré"]
-    end
-    subgraph Z["Zero Trust"]
-        direction TB
-        u["Utilisateur + appareil<br/>(où qu'ils soient)"] --> pep{{"Point d'application<br/>de la politique"}}
-        pep -- "décision par requête<br/>identité · état du poste · contexte" --> res["Une ressource précise"]
-    end
-    P ~~~ Z
-```
 
 | Critère | Modèle périmétrique | Zero Trust |
 | --- | --- | --- |
@@ -114,7 +98,7 @@ règle l'autorise explicitement. Les outils : pare-feu distribués sur les hyper
 en intègre un), groupes de sécurité cloud, agents sur les hôtes.
 
 **Lien avec ma formation :** la segmentation en VLAN que j'ai pratiquée en
-[atelier](../../projets/infrastructure-systeme-proxmox-dhcp-vlan/) est une **première étape** :
+[atelier](../../realisations/modelisation-packet-tracer-vlan/) est une **première étape** :
 elle sépare les populations, mais à l'échelle d'un service entier, pas d'une machine.
 
 ### 3. Chiffrement de bout en bout
@@ -122,7 +106,7 @@ elle sépare les populations, mais à l'échelle d'un service entier, pas d'une 
 Si le réseau interne est considéré hostile, tout flux doit être chiffré et authentifié,
 **y compris entre deux serveurs du même datacenter** : TLS 1.3 et, idéalement, TLS mutuel
 (mTLS) entre services, SSH à la place de Telnet, SNMPv3, Syslog sur TLS. Ma
-[pratique sur Root-Me](../../writeups/root-me-fondamentaux-reseau-protocoles-en-clair/) montre
+[pratique sur Root-Me](../../realisations/root-me-analyse-protocoles-en-clair/) montre
 concrètement ce qui devient lisible lorsque ce principe n'est pas respecté.
 
 ### 4. Visibilité et analyse continues

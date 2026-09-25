@@ -1,0 +1,67 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import { ExternalLink } from '@lucide/astro';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import { BLOCS, CONTEXTES } from '@/config/referentiel';
+import { url } from '@/utils/url';
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('realisations', ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const d = entry.data;
+
+// Compétences mobilisées, regroupées par bloc du référentiel
+const parBloc = BLOCS.map((b) => ({
+  titre: b.titre,
+  items: b.competences.filter((c) => (d.competences as string[]).includes(c.id)),
+})).filter((b) => b.items.length > 0);
+---
+
+<ArticleLayout
+  title={d.title}
+  description={d.description}
+  eyebrow={CONTEXTES[d.contexte]}
+  back={{ href: 'realisations/', label: 'Toutes les réalisations' }}
+  meta={[
+    { label: 'Cadre', value: d.cadre },
+    { label: 'Période', value: d.periode },
+    { label: 'Outils', value: d.outils.join(', ') },
+  ]}
+  headings={headings}
+  notice={d.confidentialite}
+>
+  <div slot="entete" class="mt-6 rounded-lg border border-brand-200 bg-brand-50/60 p-4 dark:border-brand-400/30 dark:bg-brand-400/5">
+    <p class="text-sm font-semibold text-brand-800 dark:text-brand-300">Compétences du référentiel mobilisées</p>
+    <div class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+      {
+        parBloc.map((b) => (
+          <div>
+            <p class="text-xs text-slate-500">{b.titre.split(' — ')[0]}</p>
+            <ul class="mt-1 space-y-1">
+              {b.items.map((c) => (
+                <li>
+                  <a href={url(`competences/#${c.id}`)} class="text-slate-800 hover:text-brand-700 dark:text-slate-200 dark:hover:text-brand-300">
+                    {c.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    {
+      d.documentation && (
+        <a href={d.documentation} rel="noopener" class="btn btn-primary mt-4">
+          Documentation détaillée du TP <ExternalLink class="size-4" aria-hidden="true" />
+        </a>
+      )
+    }
+  </div>
+  <Content />
+</ArticleLayout>

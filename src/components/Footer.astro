@@ -1,41 +1,35 @@
 ---
-import { Mail, ShieldCheck } from '@lucide/astro';
+import { Flag, Mail } from '@lucide/astro';
 import BrandIcon from './BrandIcon.astro';
 import { SITE } from '@/config/site';
-import { url } from '@/utils/url';
 
 const year = new Date().getFullYear();
+const lien = 'flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-brand-300';
 ---
 
 <footer class="mt-24 border-t border-slate-200 bg-slate-50 py-8 text-sm dark:border-slate-800 dark:bg-slate-950">
   <div
     class="container-page flex flex-col gap-4 text-slate-600 sm:flex-row sm:items-center sm:justify-between dark:text-slate-400"
   >
-    <p class="text-xs">{`© ${year} ${SITE.author} · ${SITE.role}`}</p>
+    <p class="text-xs">{`© ${year} ${SITE.author} · ${SITE.ecole}`}</p>
     <ul class="flex flex-wrap items-center gap-4">
       <li>
-        <a href={SITE.github.url} rel="me noopener" class="flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-brand-300">
-          <BrandIcon name="github" class="size-3.5" /> GitHub
-        </a>
+        <a href={`mailto:${SITE.email}`} class={lien}><Mail class="size-3.5" aria-hidden="true" /> E-mail</a>
+      </li>
+      <li>
+        <a href={SITE.github.url} rel="me noopener" class={lien}><BrandIcon name="github" class="size-3.5" /> GitHub</a>
       </li>
       {
         SITE.linkedin && (
           <li>
-            <a href={SITE.linkedin.url} rel="me noopener" class="flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-brand-300">
+            <a href={SITE.linkedin.url} rel="me noopener" class={lien}>
               <BrandIcon name="linkedin" class="size-3.5" /> LinkedIn
             </a>
           </li>
         )
       }
       <li>
-        <a href={`mailto:${SITE.email}`} class="flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-brand-300">
-          <Mail class="size-3.5" aria-hidden="true" /> E-mail
-        </a>
-      </li>
-      <li>
-        <a href={url('.well-known/security.txt')} class="flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-brand-300">
-          <ShieldCheck class="size-3.5" aria-hidden="true" /> security.txt
-        </a>
+        <a href={SITE.rootme.url} rel="noopener" class={lien}><Flag class="size-3.5" aria-hidden="true" /> Root-Me</a>
       </li>
     </ul>
   </div>

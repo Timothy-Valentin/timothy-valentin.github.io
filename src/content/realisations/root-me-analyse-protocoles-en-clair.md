@@ -1,31 +1,38 @@
 ---
-title: "Pratique des fondamentaux réseau sur Root-Me (Analyse de protocoles en clair)"
-description: "Méthodologie d'analyse de trames avec Wireshark appliquée aux challenges de découverte réseau de Root-Me : lecture des protocoles non chiffrés (HTTP, FTP, Telnet, DNS) et préconisations pour migrer vers des protocoles chiffrés (HTTPS, SFTP, SSH)."
-date: 2026-05-10
-plateforme: "Root-Me"
-categorie: "Réseau"
+title: "Pratique des fondamentaux réseau sur Root-Me : analyse de protocoles en clair"
+court: "Root-Me"
+description: "8 challenges validés dans la catégorie Réseau de Root-Me. Méthode d'analyse de trames avec Wireshark (HTTP, FTP, Telnet, DNS) et préconisations pour migrer vers des protocoles chiffrés (HTTPS, SFTP, SSH)."
+contexte: personnel
+cadre: "Root-Me — pseudo « Petitprince »"
+periode: "En cours"
+competences:
+  - devpro
+  - infra
+  - usages
 outils:
-  - Wireshark
-tags:
-  - Analyse de trames
-  - HTTP
-  - FTP
-  - Telnet
-  - DNS
-  - Chiffrement
-  - HTTPS
-  - SFTP
-  - SSH
+  - "Wireshark"
+  - "Root-Me"
+confidentialite: "Conformément aux règles de Root-Me, aucune solution ni aucun mot de passe de validation n'est publié."
+ordre: 6
 ---
 
-## Objectif
+## Contexte
 
-Les challenges de découverte de la catégorie **Réseau** de Root-Me fournissent des **captures
-réseau** à analyser. Leur intérêt pédagogique rejoint directement ma formation SISR : comprendre
-ce qui circule réellement sur un réseau et **mesurer le risque des protocoles non chiffrés**.
+**Root-Me** est une plateforme française et légale d'entraînement à la sécurité informatique. Je
+m'y entraîne en autonomie, en complément de ma formation, sous le pseudo
+[Petitprince](https://www.root-me.org/Petitprince).
 
-Cette fiche présente la **méthode** que j'applique, puis les **préconisations de sécurité**
-qui en découlent pour un administrateur.
+| Au 26 septembre 2026 | |
+| --- | --- |
+| Challenges validés | **8**, tous dans la catégorie **Réseau** |
+| Points | 95 |
+
+Les challenges de découverte de la catégorie Réseau fournissent des **captures réseau** à
+analyser. Ils rejoignent directement ma formation SISR : comprendre ce qui circule réellement sur
+un réseau et **mesurer le risque des protocoles non chiffrés**.
+
+Cette fiche présente la **méthode** que j'applique, puis les **préconisations de sécurité** qui en
+découlent pour un administrateur.
 
 ## 1. Méthodologie d'analyse avec Wireshark
 
@@ -90,8 +97,8 @@ systèmes et réseaux.
 
 - **Désactiver** les services en clair (Telnet, FTP) sur les serveurs et les équipements réseau une fois l'alternative chiffrée en place ;
 - **Rediriger** systématiquement HTTP vers HTTPS sur les serveurs web ;
-- **Segmenter le réseau** (VLAN) pour limiter les zones où un trafic peut être capturé — une notion mise en pratique dans mes [ateliers de formation](../../projets/infrastructure-systeme-proxmox-dhcp-vlan/) ;
-- **Administrer les équipements en SSH** plutôt qu'en Telnet, comme je le fais avec [PuTTY](../../homelab/methodologie-administration-acces-console/).
+- **Segmenter le réseau** (VLAN) pour limiter les zones où un trafic peut être capturé — une notion mise en pratique dans mes [ateliers de formation](../modelisation-packet-tracer-vlan/) ;
+- **Administrer les équipements en SSH** plutôt qu'en Telnet, comme je le fais avec [PuTTY](../administration-console-ssh-putty/).
 
 ## Ce que je retiens
 

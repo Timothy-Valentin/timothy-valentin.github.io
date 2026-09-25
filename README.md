@@ -1,63 +1,45 @@
-# Portfolio technique — Timothy Valentin
+# Portfolio — Timothy Valentin
 
-Portfolio BTS SIO option **SISR** (épreuves E4 / E5) et candidatures en alternance
-cybersécurité : réalisations professionnelles, homelab, write-ups Root-Me et veille
-technologique sur l'architecture Zero Trust.
+Portfolio de BTS SIO option SISR (lycée Henri Matisse, Cugnaux) : parcours, réalisations,
+tableau de synthèse des compétences et veille technologique.
 
-## Stack
+**En ligne :** https://timothy-valentin.github.io
 
-| Élément | Choix |
+## Mettre à jour le contenu
+
+Tout le contenu se modifie dans des fichiers texte, sans toucher au code :
+
+| Je veux… | Fichier |
 | --- | --- |
-| Framework | [Astro 7](https://astro.build) (site 100 % statique), Markdown via Sätteri + MDX |
-| Styles | Tailwind CSS 4 + `@tailwindcss/typography`, thème clair par défaut (mode sombre au choix) |
-| Recherche | [Pagefind](https://pagefind.app), index généré au build, exécuté côté client |
-| Diagrammes | Mermaid.js (chargé uniquement sur les pages qui en contiennent) |
-| Icônes | `@lucide/astro` (SVG inline) |
-| Code | Shiki bi-thème + grammaire Cisco IOS maison (`src/plugins/cisco-ios.tmLanguage.mjs`) |
-| Déploiement | GitHub Actions → GitHub Pages |
+| Modifier mes liens, mon e-mail, ajouter mon CV ou LinkedIn | `src/config/site.ts` |
+| Modifier ou ajouter une réalisation | `src/content/realisations/*.md` |
+| Ajouter le lien Google Docs d'un TP | champ `documentation:` en haut de la fiche |
+| Modifier la veille | `src/content/veille/*.md` |
+| Modifier mon parcours (formations, expériences) | `src/pages/parcours.astro` |
+
+**Ajouter le CV :** déposer le PDF dans `public/` (par exemple `public/cv-timothy-valentin.pdf`),
+puis renseigner `cv: 'cv-timothy-valentin.pdf'` dans `src/config/site.ts`. Les boutons
+« Télécharger mon CV » apparaissent alors automatiquement.
+
+**Nouvelle réalisation :** copier une fiche existante et adapter l'en-tête. Le champ
+`competences` utilise les identifiants définis dans `src/config/referentiel.ts` ; le tableau de
+synthèse se met à jour tout seul.
 
 ## Commandes
 
 ```bash
-npm ci            # installation reproductible
-npm run dev       # serveur de développement (la recherche n'y est pas disponible)
-npm run build     # astro check + build + index Pagefind
-npm run preview   # prévisualisation du build de production
+npm ci            # installation
+npm run dev       # aperçu local pendant l'édition (http://localhost:4321)
+npm run build     # vérification + génération du site dans dist/
 ```
 
-## Arborescence
+## Publication
 
-```text
-src/
-├── config/site.ts        # identité, liens, certification (source unique)
-├── content.config.ts     # schémas Zod des collections
-├── content/
-│   ├── projets/          # fiches E4/E5
-│   ├── homelab/          # infrastructure personnelle
-│   ├── writeups/         # entraînement Root-Me
-│   └── veille/           # veille Zero Trust / NIS 2
-├── layouts/  components/  pages/  plugins/  scripts/  styles/
-public/
-├── .well-known/security.txt   # RFC 9116
-└── robots.txt
-```
+Le dépôt doit s'appeler `timothy-valentin.github.io`. Dans GitHub : **Settings › Pages › Source :
+GitHub Actions**. Chaque `git push` sur `main` reconstruit et publie le site
+(`.github/workflows/deploy.yml`).
 
-## Ajouter une fiche
+## Technique
 
-Créer un fichier `.md` ou `.mdx` dans la collection voulue ; le frontmatter est validé au
-build (voir `src/content.config.ts`). Les diagrammes s'écrivent dans un bloc de code
-`mermaid`, les configurations Cisco dans un bloc `cisco`.
-
-## Déploiement
-
-1. Dépôt GitHub → **Settings › Pages › Source : GitHub Actions**.
-2. Pousser sur `main` : le workflow `.github/workflows/deploy.yml` construit et publie le site.
-
-L'URL et le chemin de base sont fournis automatiquement par `actions/configure-pages`
-(variables `SITE_URL` / `BASE_PATH`) ; les valeurs par défaut de `astro.config.mjs`
-ne servent qu'aux builds locaux. `public/robots.txt` et `public/.well-known/security.txt`
-contiennent des URL absolues à ajuster si le nom du dépôt diffère de `portfolio`.
-
-## Licence
-
-Code sous licence MIT. Contenus rédactionnels © Timothy Valentin.
+Astro 7 (site statique), Tailwind CSS 4, icônes Lucide, schémas en SVG. Aucun cookie, aucun
+traceur, aucun script tiers : le site complet pèse moins de 400 Ko.

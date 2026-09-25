@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" font-family="Segoe UI, system-ui, Arial, sans-serif" role="img" aria-label="Architecture du réseau : réseau extérieur, pare-feu pfSense, puis sur le réseau interne un serveur Windows (AD DS, DNS, DHCP, GPO), des clients Windows et des clients Ubuntu, le tout en machines virtuelles sur Proxmox VE">
+  <rect width="820" height="360" fill="#ffffff"/>
+  <!-- Réseau extérieur -->
+  <rect x="325" y="12" width="170" height="44" rx="22" fill="#f8fafc" stroke="#64748b" stroke-dasharray="5 4"/>
+  <text x="410" y="39" font-size="14" text-anchor="middle" fill="#0f172a">Réseau extérieur</text>
+  <line x1="410" y1="56" x2="410" y2="106" stroke="#64748b" stroke-width="2"/>
+
+  <!-- Cadre Proxmox -->
+  <rect x="20" y="80" width="780" height="265" rx="12" fill="none" stroke="#1e3a70" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="36" y="102" font-size="13" font-weight="600" fill="#1e3a70">Machines virtuelles — Proxmox VE</text>
+
+  <!-- pfSense -->
+  <rect x="310" y="106" width="200" height="58" rx="8" fill="#eef3fa" stroke="#1e3a70" stroke-width="1.5"/>
+  <text x="410" y="131" font-size="14" font-weight="600" text-anchor="middle" fill="#0f172a">pfSense</text>
+  <text x="410" y="151" font-size="12.5" text-anchor="middle" fill="#475569">pare-feu · passerelle</text>
+  <line x1="410" y1="164" x2="410" y2="205" stroke="#64748b" stroke-width="2"/>
+
+  <!-- Réseau interne -->
+  <line x1="150" y1="205" x2="670" y2="205" stroke="#1e3a70" stroke-width="3"/>
+  <text x="680" y="209" font-size="12.5" fill="#475569">réseau interne</text>
+  <g stroke="#64748b" stroke-width="2">
+    <line x1="150" y1="205" x2="150" y2="245"/>
+    <line x1="410" y1="205" x2="410" y2="245"/>
+    <line x1="670" y1="205" x2="670" y2="245"/>
+  </g>
+
+  <!-- Serveurs et clients -->
+  <g text-anchor="middle">
+    <rect x="45" y="245" width="210" height="80" rx="8" fill="#eef3fa" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="150" y="272" font-size="14" font-weight="600" fill="#0f172a">Windows Server</text>
+    <text x="150" y="293" font-size="12.5" fill="#475569">AD DS · DNS · DHCP</text>
+    <text x="150" y="311" font-size="12.5" fill="#475569">stratégies de groupe (GPO)</text>
+
+    <rect x="305" y="245" width="210" height="80" rx="8" fill="#ffffff" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="410" y="280" font-size="14" font-weight="600" fill="#0f172a">Clients Windows</text>
+    <text x="410" y="300" font-size="12.5" fill="#475569">membres du domaine</text>
+
+    <rect x="565" y="245" width="210" height="80" rx="8" fill="#ffffff" stroke="#1e3a70" stroke-width="1.5"/>
+    <text x="670" y="280" font-size="14" font-weight="600" fill="#0f172a">Clients Ubuntu</text>
+    <text x="670" y="300" font-size="12.5" fill="#475569">adressage DHCP · DNS</text>
+  </g>
+</svg>

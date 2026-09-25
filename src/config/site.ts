@@ -1,42 +1,31 @@
 /**
- * Données d'identité centralisées : toute modification (e-mail, liens)
- * se fait ici et se répercute sur l'ensemble du site.
- * Un lien laissé à `null` n'est pas affiché.
+ * Données d'identité centralisées. Un champ laissé à `null` n'est pas affiché.
  */
 export const SITE = {
   author: 'Timothy Valentin',
   title: 'Timothy Valentin — Portfolio BTS SIO SISR',
   description:
-    "Portfolio de Timothy Valentin, étudiant en BTS SIO option SISR : réalisations professionnelles E4/E5, homelab, pratique Root-Me et veille technologique. Recherche d'une alternance en cybersécurité.",
-  role: 'Étudiant en BTS SIO — option SISR',
+    'Portfolio de Timothy Valentin, étudiant en 2e année de BTS SIO option SISR au lycée Henri Matisse (Cugnaux) : réalisations, tableau de synthèse des compétences et veille technologique.',
+  role: 'Étudiant en 2e année de BTS SIO — option SISR',
+  ecole: 'Lycée Henri Matisse, Cugnaux (31)',
   lang: 'fr',
   email: 'timothy.valentins@gmail.com',
-  github: {
-    handle: 'timothy-valentin',
-    url: 'https://github.com/timothy-valentin',
-  },
+  github: { handle: 'timothy-valentin', url: 'https://github.com/timothy-valentin' },
+  rootme: { handle: 'Petitprince', url: 'https://www.root-me.org/Petitprince' },
   linkedin: null as { handle: string; url: string } | null,
-  rootme: null as { handle: string; url: string } | null,
-  certifications: [
-    {
-      titre: 'Introduction to Cybersecurity',
-      organisme: 'Cisco Networking Academy',
-      detail: "Badge d'initiation (6 h)",
-    },
-  ],
-  outils: ['PuTTY (liaison série et SSH)', 'Cisco Packet Tracer', 'Proxmox VE', 'VirtualBox'],
-  objectifs: [
-    'Poursuite d’études en alternance dans la cybersécurité',
-    'Analyste SOC junior',
-    'Administration des systèmes et réseaux sécurisés',
+  /** Chemin du CV dans /public (ex. 'cv-timothy-valentin.pdf'), ou null tant qu'il n'est pas prêt. */
+  cv: null as string | null,
+  recherche: [
+    'Stage de 2e année de BTS SIO',
+    'Alternance en cybersécurité pour la rentrée 2027 (SOC, administration systèmes et réseaux sécurisés)',
   ],
 };
 
 export const NAV = [
   { href: '', label: 'Accueil' },
-  { href: 'projets/', label: 'Projets E4/E5' },
-  { href: 'homelab/', label: 'Homelab' },
-  { href: 'writeups/', label: 'Root-Me' },
+  { href: 'parcours/', label: 'Parcours' },
+  { href: 'realisations/', label: 'Réalisations' },
+  { href: 'competences/', label: 'Compétences' },
   { href: 'veille/', label: 'Veille' },
   { href: 'contact/', label: 'Contact' },
 ] as const;
