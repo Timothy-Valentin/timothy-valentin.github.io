@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import { BookOpen, Rss } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import { formatDate, url } from '@/utils/url';
+
+const fiches = (await getCollection('veille', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.ordre - b.data.ordre,
+);
+---
+
+<BaseLayout
+  title="Veille technologique et réglementaire"
+  description="Veille BTS SIO : l'architecture Zero Trust (NIST SP 800-207) appliquée aux réseaux d'entreprises et d'administrations, impact de NIS 2, méthodologie et outils de veille."
+>
+  <div class="container-page py-10">
+    <PageHeader
+      eyebrow="Veille technologique & réglementaire"
+      title="Architecture Zero Trust"
+      intro="Du modèle périmétrique au principe « Ne jamais faire confiance, toujours vérifier » : comment les réseaux d'entreprises et d'administrations basculent vers le Zero Trust, et pourquoi la directive NIS 2 accélère ce mouvement."
+    />
+
+    <section class="mt-10 grid gap-4 md:grid-cols-2" aria-label="Fiches de veille">
+      {
+        fiches.map((f) => {
+          const Icon = f.data.type === 'synthese' ? BookOpen : Rss;
+          return (
+            <a href={url(`veille/${f.id}/`)} class="card card-link group flex flex-col">
+              <div class="flex items-center justify-between font-mono text-xs text-zinc-500">
+                <span class="badge badge-accent">
+                  {f.data.type === 'synthese' ? 'Fiche de synthèse' : 'Méthodologie'}
+                </span>
+                <time datetime={(f.data.miseAJour ?? f.data.date).toISOString()}>
+                  {formatDate(f.data.miseAJour ?? f.data.date)}
+                </time>
+              </div>
+              <Icon class="mt-4 size-5 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+              <h2 class="mt-2 font-semibold text-zinc-900 group-hover:text-cyan-700 dark:text-zinc-100 dark:group-hover:text-cyan-300">
+                {f.data.title}
+              </h2>
+              <p class="mt-2 flex-1 text-sm text-zinc-600 dark:text-zinc-400">{f.data.description}</p>
+              <ul class="mt-4 flex flex-wrap gap-1.5">
+                {f.data.tags.slice(0, 5).map((t) => (
+                  <li class="badge">{t}</li>
+                ))}
+              </ul>
+            </a>
+          );
+        })
+      }
+    </section>
+
+    <section class="mt-12 card" aria-labelledby="problematique">
+      <h2 id="problematique" class="font-semibold text-zinc-900 dark:text-zinc-100">
+        Problématique de veille
+      </h2>
+      <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <em>
+          Dans un contexte de télétravail généralisé, d'adoption du cloud et de menaces ciblant les
+          administrations (rançongiciels, compromission d'identités), le modèle « château fort »
+          suffit-il encore — et comment un administrateur SISR peut-il amorcer concrètement une
+          transition Zero Trust sur une infrastructure existante ?
+        </em>
+      </p>
+    </section>
+  </div>
+</BaseLayout>

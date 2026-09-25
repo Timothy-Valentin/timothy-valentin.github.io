@@ -1,0 +1,45 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+import { readingTime } from '@/utils/url';
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection('veille', ({ data }) => !data.draft);
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const d = entry.data;
+---
+
+<ArticleLayout
+  title={d.title}
+  description={d.description}
+  date={d.date}
+  updated={d.miseAJour}
+  eyebrow={d.type === 'synthese' ? 'Veille · Fiche de synthèse' : 'Veille · Méthodologie'}
+  back={{ href: 'veille/', label: 'Retour à la veille' }}
+  tags={d.tags}
+  headings={headings}
+  readingTime={readingTime(entry.body)}
+>
+  <Content />
+  {
+    d.sources.length > 0 && (
+      <>
+        <h2 id="sources">Sources</h2>
+        <ol>
+          {d.sources.map((s) => (
+            <li>
+              <a href={s.url} rel="noopener">
+                {s.titre}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </>
+    )
+  }
+</ArticleLayout>
