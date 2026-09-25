@@ -1,0 +1,28 @@
+# Build
+dist/
+.astro/
+
+# Dépendances
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environnement
+.env
+.env.*
+!.env.example
+
+# Secrets : ne jamais versionner une clé privée
+*.key
+*secret*.asc
+private*.asc
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/

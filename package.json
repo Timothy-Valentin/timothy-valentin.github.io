@@ -1,0 +1,33 @@
+{
+  "name": "portfolio-timothy-valentin",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio technique BTS SIO SISR — Timothy Valentin (réseaux, systèmes, sécurité défensive).",
+  "author": "Timothy Valentin",
+  "license": "MIT",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/markdown-satteri": "^0.4.2",
+    "@astrojs/mdx": "^8.0.2",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@lucide/astro": "^1.48.0",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "mermaid": "^12.0.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
+  }
+}
