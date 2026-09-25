@@ -1,0 +1,94 @@
+---
+import { Mail, ShieldCheck } from '@lucide/astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import PgpKey from '@/components/PgpKey.astro';
+import BrandIcon from '@/components/BrandIcon.astro';
+import { SITE } from '@/config/site';
+import { url } from '@/utils/url';
+
+const canaux = [
+  {
+    label: 'E-mail',
+    value: SITE.email,
+    href: `mailto:${SITE.email}`,
+    hint: 'Canal privilégié — chiffrement PGP bienvenu.',
+    icon: 'mail',
+  },
+  {
+    label: 'GitHub',
+    value: `github.com/${SITE.github.handle}`,
+    href: SITE.github.url,
+    hint: 'Code source de ce portfolio et scripts d’infrastructure.',
+    icon: 'github',
+  },
+  {
+    label: 'LinkedIn',
+    value: `linkedin.com/in/${SITE.linkedin.handle}`,
+    href: SITE.linkedin.url,
+    hint: 'Parcours, recherche d’alternance en cybersécurité.',
+    icon: 'linkedin',
+  },
+] as const;
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contacter Timothy Valentin : e-mail, GitHub, LinkedIn et clé publique OpenPGP."
+>
+  <div class="container-page max-w-3xl py-10">
+    <PageHeader
+      eyebrow="Contact"
+      title="Me contacter"
+      intro="Pour une proposition d'alternance, un échange technique ou le signalement d'une vulnérabilité sur ce site. Aucun formulaire, aucun traceur : un simple lien mailto et une clé PGP."
+    />
+
+    <ul class="mt-10 divide-y divide-zinc-200 border-y border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+      {
+        canaux.map((c) => (
+          <li>
+            <a
+              href={c.href}
+              rel={c.icon === 'mail' ? undefined : 'me noopener'}
+              class="group flex items-center gap-4 py-4"
+            >
+              <span class="flex size-10 shrink-0 items-center justify-center rounded-md border border-zinc-200 text-cyan-600 dark:border-zinc-800 dark:text-cyan-400">
+                {c.icon === 'mail' ? (
+                  <Mail class="size-4" aria-hidden="true" />
+                ) : (
+                  <BrandIcon name={c.icon} />
+                )}
+              </span>
+              <span class="min-w-0">
+                <span class="block font-mono text-xs text-zinc-500 uppercase">{c.label}</span>
+                <span class="block truncate font-medium text-zinc-900 group-hover:text-cyan-700 dark:text-zinc-100 dark:group-hover:text-cyan-300">
+                  {c.value}
+                </span>
+                <span class="block text-sm text-zinc-500">{c.hint}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-10">
+      <PgpKey />
+    </div>
+
+    <section class="mt-10 card" aria-labelledby="divulgation">
+      <h2 id="divulgation" class="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-100">
+        <ShieldCheck class="size-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+        Divulgation responsable
+      </h2>
+      <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        Ce site est statique (aucune base de données, aucun cookie, aucun script tiers). Si vous
+        identifiez malgré tout un problème de sécurité, merci de me l'écrire, chiffré avec la clé
+        ci-dessus. Les modalités sont publiées dans le fichier{' '}
+        <a href={url('.well-known/security.txt')} class="font-mono text-cyan-700 hover:underline dark:text-cyan-400"
+          >/.well-known/security.txt</a
+        > (RFC 9116).
+      </p>
+    </section>
+  </div>
+</BaseLayout>

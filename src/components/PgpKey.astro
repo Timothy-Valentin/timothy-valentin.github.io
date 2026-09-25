@@ -1,0 +1,77 @@
+---
+import { Copy, Download, KeyRound } from '@lucide/astro';
+import armored from '../../public/pgp/timothy-valentin.asc?raw';
+import { SITE } from '@/config/site';
+import { url } from '@/utils/url';
+
+interface Props {
+  /** Affiche le bloc ASCII complet (sinon uniquement l'empreinte). */
+  full?: boolean;
+}
+
+const { full = true } = Astro.props;
+---
+
+<section class="card" aria-labelledby="pgp-title" data-pagefind-ignore>
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h2 id="pgp-title" class="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-100">
+        <KeyRound class="size-4 text-cyan-600 dark:text-cyan-400" aria-hidden="true" />
+        Clé publique OpenPGP
+      </h2>
+      <dl class="mt-3 grid gap-x-6 gap-y-1 font-mono text-xs sm:grid-cols-[auto_1fr]">
+        <dt class="text-zinc-500">Empreinte</dt>
+        <dd class="text-zinc-800 break-all dark:text-zinc-200">{SITE.pgp.fingerprint}</dd>
+        <dt class="text-zinc-500">ID long</dt>
+        <dd class="text-zinc-800 dark:text-zinc-200">{SITE.pgp.keyId}</dd>
+        <dt class="text-zinc-500">Algorithmes</dt>
+        <dd class="text-zinc-800 dark:text-zinc-200">{SITE.pgp.algorithm}</dd>
+        <dt class="text-zinc-500">Validité</dt>
+        <dd class="text-zinc-800 dark:text-zinc-200">{SITE.pgp.created} → {SITE.pgp.expires}</dd>
+      </dl>
+    </div>
+    <div class="flex gap-2">
+      {
+        full && (
+          <button type="button" class="btn btn-ghost" data-copy-pgp>
+            <Copy class="size-4" aria-hidden="true" />
+            <span data-copy-label>Copier</span>
+          </button>
+        )
+      }
+      <a href={url(SITE.pgp.file)} download class="btn btn-primary">
+        <Download class="size-4" aria-hidden="true" /> .asc
+      </a>
+    </div>
+  </div>
+
+  {
+    full && (
+      <pre
+        id="pgp-block"
+        class="mt-4 max-h-80 overflow-auto rounded-md border border-zinc-200 bg-zinc-50 p-4 font-mono text-[0.7rem] leading-relaxed text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400"
+      >{armored}</pre>
+    )
+  }
+  <p class="mt-3 text-xs text-zinc-500">
+    Vérifiez toujours l'empreinte par un second canal avant de chiffrer un message sensible :{' '}
+    <code class="font-mono">gpg --import timothy-valentin.asc &amp;&amp; gpg --fingerprint {SITE.pgp.keyId}</code>
+  </p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-pgp]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const block = document.getElementById('pgp-block');
+      const label = button.querySelector('[data-copy-label]');
+      if (!block || !label) return;
+      try {
+        await navigator.clipboard.writeText(block.textContent ?? '');
+        label.textContent = 'Copiée';
+      } catch {
+        label.textContent = 'Échec';
+      }
+      setTimeout(() => (label.textContent = 'Copier'), 2000);
+    });
+  });
+</script>
