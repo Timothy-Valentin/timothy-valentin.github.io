@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import EntryCard from '@/components/EntryCard.astro';
+import { url } from '@/utils/url';
+
+const fiches = (await getCollection('homelab', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.ordre - b.data.ordre,
+);
+
+const topologie = `flowchart LR
+  internet((Internet)) --- box[Box FAI<br/>192.168.1.0/24]
+  box --- fw[pfSense VM<br/>WAN / LAN]
+  subgraph pve[Proxmox VE]
+    fw --- v10[vmbr0 · VLAN 10<br/>Services]
+    fw --- v20[vmbr0 · VLAN 20<br/>Admin]
+    v66[vmbr1 · sans port physique<br/>Lab cyber isolé]
+  end
+  v20 --- srv[Serveur Debian durci<br/>SSH ed25519 + fail2ban]
+  v10 --- svc[Conteneurs LXC<br/>DNS · Syslog · Git]
+  v66 --- lab[VM d'entraînement<br/>aucune route sortante]`;
+---
+
+<BaseLayout
+  title="Homelab & infrastructure personnelle"
+  description="Documentation du homelab de Timothy Valentin : hyperviseur Proxmox VE, VirtualBox, stockage ZFS/LVM, serveur Debian durci."
+>
+  <div class="container-page py-10">
+    <PageHeader
+      eyebrow="Infrastructure personnelle"
+      title="Homelab"
+      intro="Mon environnement de test permanent : chaque configuration présentée en projet a d'abord été cassée, réparée et documentée ici. Tout y est segmenté, et le laboratoire cyber n'a aucune route vers le reste du réseau."
+    />
+
+    <section class="mt-10" aria-labelledby="vue-ensemble">
+      <h2 id="vue-ensemble" class="text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Vue d'ensemble
+      </h2>
+      <pre class="mermaid mt-4" data-pagefind-ignore>{topologie}</pre>
+    </section>
+
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      {
+        fiches.map((f) => (
+          <EntryCard
+            href={url(`homelab/${f.id}/`)}
+            title={f.data.title}
+            description={f.data.description}
+            date={f.data.date}
+            label="Homelab"
+            tags={f.data.tags}
+          />
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
