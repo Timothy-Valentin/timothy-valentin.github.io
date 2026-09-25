@@ -1,0 +1,8 @@
+# Portfolio de Timothy Valentin — BTS SIO SISR
+# Site statique public : indexation autorisée, hors bundle technique de recherche.
+
+User-agent: *
+Allow: /
+Disallow: /portfolio/pagefind/
+
+Sitemap: https://valentin-timothy.github.io/portfolio/sitemap-index.xml
