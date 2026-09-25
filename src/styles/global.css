@@ -1,0 +1,124 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Mode sombre piloté par la classe .dark sur <html> (activée par défaut). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+    monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-padding-top: 5rem;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-zinc-50 text-zinc-800 antialiased dark:bg-zinc-950 dark:text-zinc-300;
+  }
+  ::selection {
+    @apply bg-cyan-500/30 text-inherit;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-cyan-500;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-5xl px-4 sm:px-6;
+  }
+  .card {
+    @apply rounded-lg border border-zinc-200 bg-white p-5 transition-colors dark:border-zinc-800 dark:bg-zinc-900/60;
+  }
+  .card-link {
+    @apply hover:border-cyan-600/60 dark:hover:border-cyan-400/50;
+  }
+  .badge {
+    @apply inline-flex items-center rounded border border-zinc-300 px-1.5 py-0.5 font-mono text-[0.7rem] leading-none text-zinc-600 dark:border-zinc-700 dark:text-zinc-400;
+  }
+  .badge-accent {
+    @apply border-cyan-600/40 bg-cyan-50 text-cyan-800 dark:border-cyan-400/30 dark:bg-cyan-400/10 dark:text-cyan-300;
+  }
+  .eyebrow {
+    @apply font-mono text-xs tracking-wider text-cyan-700 uppercase dark:text-cyan-400;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-md border px-3.5 py-2 text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply border-cyan-700 bg-cyan-700 text-white hover:bg-cyan-800 dark:border-cyan-400 dark:bg-cyan-400 dark:text-zinc-950 dark:hover:bg-cyan-300;
+  }
+  .btn-ghost {
+    @apply border-zinc-300 text-zinc-700 hover:border-cyan-600 hover:text-cyan-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-cyan-400 dark:hover:text-cyan-300;
+  }
+}
+
+/* ---------- Contenu Markdown ---------- */
+.prose-tech {
+  @apply prose prose-zinc max-w-none dark:prose-invert;
+  @apply prose-headings:scroll-mt-20 prose-headings:font-semibold prose-headings:tracking-tight;
+  @apply prose-h2:mt-12 prose-h2:border-b prose-h2:border-zinc-200 prose-h2:pb-2 dark:prose-h2:border-zinc-800;
+  @apply prose-a:text-cyan-700 prose-a:underline-offset-2 hover:prose-a:text-cyan-600 dark:prose-a:text-cyan-400;
+  @apply prose-code:font-mono prose-code:text-[0.85em] prose-code:before:content-none prose-code:after:content-none;
+  @apply prose-table:text-sm prose-th:bg-zinc-100 prose-th:px-3 prose-td:px-3 dark:prose-th:bg-zinc-900;
+  @apply prose-blockquote:border-cyan-600 prose-blockquote:font-normal prose-blockquote:not-italic dark:prose-blockquote:border-cyan-400;
+}
+.prose-tech :where(:not(pre) > code) {
+  @apply rounded bg-zinc-200/70 px-1 py-0.5 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200;
+}
+.prose-tech table {
+  @apply block overflow-x-auto;
+}
+.prose-tech pre {
+  @apply rounded-lg border border-zinc-200 text-[0.8rem] leading-relaxed dark:border-zinc-800;
+}
+
+/* Shiki bi-thème (defaultColor: false) */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+/* Diagrammes Mermaid : le code source reste lisible avant le rendu. */
+pre.mermaid {
+  @apply flex justify-center overflow-x-auto rounded-lg border border-zinc-200 bg-white p-4 font-mono text-xs dark:border-zinc-800 dark:bg-zinc-900;
+}
+pre.mermaid:not([data-processed]) {
+  @apply justify-start whitespace-pre text-zinc-500;
+}
+pre.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Pagefind UI aux couleurs du thème */
+.pagefind-ui {
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: #0e7490;
+  --pagefind-ui-text: #27272a;
+  --pagefind-ui-background: #ffffff;
+  --pagefind-ui-border: #d4d4d8;
+  --pagefind-ui-tag: #f4f4f5;
+  --pagefind-ui-border-radius: 6px;
+  --pagefind-ui-font: var(--font-sans);
+}
+.dark .pagefind-ui {
+  --pagefind-ui-primary: #22d3ee;
+  --pagefind-ui-text: #e4e4e7;
+  --pagefind-ui-background: #18181b;
+  --pagefind-ui-border: #3f3f46;
+  --pagefind-ui-tag: #27272a;
+}
