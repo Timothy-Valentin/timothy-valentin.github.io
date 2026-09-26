@@ -18,36 +18,43 @@ concurrency:
 
 jobs:
   build:
-    name: Build (Astro + Pagefind)
+    name: Construction du site
     runs-on: ubuntu-latest
     steps:
       - name: Récupération du code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Installation de Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
 
       - name: Configuration de GitHub Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Installation des dépendances
         run: npm ci
 
-      - name: Build (vérification TypeScript, Astro, index Pagefind)
+      - name: Vérification et construction (astro check + astro build)
         run: npm run build
         env:
-          # URL et chemin de base réels fournis par GitHub Pages
           SITE_URL: ${{ steps.pages.outputs.origin }}
           BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
+      # Archive créée ici plutôt qu'avec actions/upload-pages-artifact, qui exclut
+      # les dossiers cachés : /.well-known/security.txt doit être publié (RFC 9116).
+      - name: Archivage du site
+        run: tar --dereference --hard-dereference --directory dist -cvf "$RUNNER_TEMP/artifact.tar" .
+
       - name: Publication de l'artefact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          path: ./dist
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
 
   deploy:
     name: Déploiement
@@ -59,4 +66,4 @@ jobs:
     steps:
       - name: Déploiement sur GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
