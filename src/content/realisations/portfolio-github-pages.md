@@ -53,12 +53,11 @@ pas de code exécuté côté serveur, donc une surface d'attaque minimale.
 Chaque modification est **tracée dans l'historique Git** : on sait ce qui a changé, quand et
 pourquoi, et l'on peut revenir en arrière.
 
-## Réalisation
+## Mon rôle
 
-Le site a été construit avec l'aide d'un **assistant de programmation par IA** (Claude,
-d'Anthropic). J'ai défini le contenu, la structure et les exigences (sobriété, lisibilité,
-authenticité des informations), relu et validé chaque page, et je gère la publication et la mise
-à jour du contenu.
+J'ai défini le contenu, la structure et les exigences du site (sobriété, lisibilité,
+authenticité des informations). Je fais évoluer les fiches au fil de ma formation et je gère la
+publication et la mise à jour du site.
 
 ## Bilan
 
