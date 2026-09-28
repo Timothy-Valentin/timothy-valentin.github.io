@@ -23,7 +23,7 @@ const formation = [
     lieu: null,
     periode: null,
     detail:
-      'Stage de coach sportif en 1re année (Gymnasia, Tournefeuille), puis alternance en 2e année (L’Orange Bleue, Saint-Lys).',
+      'Stages de coach sportif en 1re année (Gymnasia, Tournefeuille) puis en 2e année (L’Orange Bleue, Saint-Lys).',
   },
 ];
 
@@ -45,10 +45,10 @@ const experiences = [
     lien: null,
   },
   {
-    titre: 'Alternance — Coach sportif, L’Orange Bleue',
+    titre: 'Stage — Coach sportif, L’Orange Bleue',
     lieu: 'Saint-Lys',
     periode: 'DEUST Métiers de la forme, 2e année',
-    detail: 'Coach sportif en salle de sport, en alternance avec la 2e année de DEUST.',
+    detail: 'Stage de coach sportif en salle de sport, en 2e année de DEUST.',
     lien: null,
   },
   {
@@ -163,6 +163,14 @@ const experiences = [
           <a href={url('realisations/root-me-analyse-protocoles-en-clair/')} class="link mt-1 inline-block text-sm">
             Voir la fiche →
           </a>
+        </li>
+        <li class="card sm:col-span-2">
+          <p class="font-semibold text-slate-900 dark:text-slate-100">TryHackMe — « {SITE.tryhackme.handle} »</p>
+          <p class="text-sm text-slate-500">
+            6 salles terminées, dont <em>Junior Security Analyst Intro</em>, <em>Defensive Security Intro</em>,
+            <em>What is Networking?</em> et <em>Careers in Cyber</em>
+          </p>
+          <a href={SITE.tryhackme.url} rel="noopener" class="link mt-1 inline-block text-sm">Voir le profil →</a>
         </li>
       </ul>
     </section>

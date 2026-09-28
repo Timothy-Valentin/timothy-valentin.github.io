@@ -1,5 +1,5 @@
 ---
-import { Flag, Mail } from '@lucide/astro';
+import { Flag, Mail, Target } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import BrandIcon from '@/components/BrandIcon.astro';
@@ -11,7 +11,7 @@ type Canal = {
   value: string;
   href: string;
   hint: string;
-  icon: 'mail' | 'github' | 'linkedin' | 'rootme';
+  icon: 'mail' | 'github' | 'linkedin' | 'rootme' | 'tryhackme';
 };
 
 const canaux: Canal[] = [
@@ -47,6 +47,13 @@ const canaux: Canal[] = [
     hint: 'Profil d’entraînement à la cybersécurité.',
     icon: 'rootme',
   },
+  {
+    label: 'TryHackMe',
+    value: `tryhackme.com/p/${SITE.tryhackme.handle}`,
+    href: SITE.tryhackme.url,
+    hint: 'Parcours d’apprentissage en cybersécurité défensive.',
+    icon: 'tryhackme',
+  },
 ];
 ---
 
@@ -69,6 +76,7 @@ const canaux: Canal[] = [
               <span class="flex size-10 shrink-0 items-center justify-center rounded-md border border-slate-200 text-brand-700 dark:border-slate-800 dark:text-brand-300">
                 {c.icon === 'mail' && <Mail class="size-4" aria-hidden="true" />}
                 {c.icon === 'rootme' && <Flag class="size-4" aria-hidden="true" />}
+                {c.icon === 'tryhackme' && <Target class="size-4" aria-hidden="true" />}
                 {(c.icon === 'github' || c.icon === 'linkedin') && <BrandIcon name={c.icon} />}
               </span>
               <span class="min-w-0">

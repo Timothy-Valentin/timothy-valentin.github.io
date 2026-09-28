@@ -1,5 +1,5 @@
 ---
-import { Flag, Mail } from '@lucide/astro';
+import { Flag, Mail, Target } from '@lucide/astro';
 import BrandIcon from './BrandIcon.astro';
 import { SITE } from '@/config/site';
 
@@ -30,6 +30,9 @@ const lien = 'flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-bra
       }
       <li>
         <a href={SITE.rootme.url} rel="noopener" class={lien}><Flag class="size-3.5" aria-hidden="true" /> Root-Me</a>
+      </li>
+      <li>
+        <a href={SITE.tryhackme.url} rel="noopener" class={lien}><Target class="size-3.5" aria-hidden="true" /> TryHackMe</a>
       </li>
     </ul>
   </div>

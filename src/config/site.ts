@@ -12,7 +12,11 @@ export const SITE = {
   email: 'timothy.valentins@gmail.com',
   github: { handle: 'timothy-valentin', url: 'https://github.com/timothy-valentin' },
   rootme: { handle: 'Petitprince', url: 'https://www.root-me.org/Petitprince' },
-  linkedin: null as { handle: string; url: string } | null,
+  tryhackme: { handle: 'TimothyValentin', url: 'https://tryhackme.com/p/TimothyValentin' },
+  linkedin: { handle: 'timothyvalentin', url: 'https://www.linkedin.com/in/timothyvalentin/' } as {
+    handle: string;
+    url: string;
+  } | null,
   /** Chemin du CV dans /public (ex. 'cv-timothy-valentin.pdf'), ou null tant qu'il n'est pas prêt. */
   cv: null as string | null,
   recherche: [
