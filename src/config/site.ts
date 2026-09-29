@@ -11,7 +11,7 @@ export const SITE = {
   lang: 'fr',
   email: 'timothy.valentins@gmail.com',
   github: { handle: 'timothy-valentin', url: 'https://github.com/timothy-valentin' },
-  rootme: { handle: 'Petitprince', url: 'https://www.root-me.org/Petitprince' },
+  rootme: { handle: 'TimothyValentin', url: 'https://www.root-me.org/TimothyValentin' },
   tryhackme: { handle: 'TimothyValentin', url: 'https://tryhackme.com/p/TimothyValentin' },
   linkedin: { handle: 'timothyvalentin', url: 'https://www.linkedin.com/in/timothyvalentin/' } as {
     handle: string;

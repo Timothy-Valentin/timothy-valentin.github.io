@@ -3,7 +3,7 @@ title: "Pratique des fondamentaux réseau sur Root-Me : analyse de protocoles en
 court: "Root-Me"
 description: "8 challenges validés dans la catégorie Réseau de Root-Me. Méthode d'analyse de trames avec Wireshark (HTTP, FTP, Telnet, DNS) et préconisations pour migrer vers des protocoles chiffrés (HTTPS, SFTP, SSH)."
 contexte: personnel
-cadre: "Root-Me — pseudo « Petitprince »"
+cadre: "Root-Me — profil « TimothyValentin »"
 periode: "En cours"
 competences:
   - devpro
@@ -19,8 +19,8 @@ ordre: 6
 ## Contexte
 
 **Root-Me** est une plateforme française et légale d'entraînement à la sécurité informatique. Je
-m'y entraîne en autonomie, en complément de ma formation, sous le pseudo
-[Petitprince](https://www.root-me.org/Petitprince).
+m'y entraîne en autonomie, en complément de ma formation, sous mon nom :
+[TimothyValentin](https://www.root-me.org/TimothyValentin).
 
 | Au 26 septembre 2026 | |
 | --- | --- |
