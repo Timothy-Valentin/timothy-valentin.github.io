@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { BookOpen, Rss } from '@lucide/astro';
+import { BookOpen, Newspaper, Rss } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import { formatDate, url } from '@/utils/url';
@@ -54,5 +54,19 @@ const fiches = (await getCollection('veille', ({ data }) => !data.draft)).sort(
         })
       }
     </section>
+
+    <a href={url('veille/actualites/')} class="card card-link group mt-4 flex items-center gap-4">
+      <Newspaper class="size-6 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+      <span class="min-w-0">
+        <span class="badge badge-accent">Mis à jour chaque jour</span>
+        <span class="mt-2 block font-semibold text-slate-900 group-hover:text-brand-700 dark:text-slate-100 dark:group-hover:text-brand-300">
+          Fil d'actualités de ma veille
+        </span>
+        <span class="mt-1 block text-sm text-slate-600 dark:text-slate-400">
+          Les dernières publications de mes sources (CERT-FR, ANSSI, CNIL, presse spécialisée),
+          collectées automatiquement et filtrées sur les passkeys et l'authentification.
+        </span>
+      </span>
+    </a>
   </div>
 </BaseLayout>

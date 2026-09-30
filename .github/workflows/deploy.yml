@@ -3,6 +3,9 @@ name: Déploiement GitHub Pages
 on:
   push:
     branches: [main]
+  # Reconstruction quotidienne (7 h, heure de Paris en été) : actualise le fil de veille.
+  schedule:
+    - cron: '0 5 * * *'
   workflow_dispatch:
 
 # Moindre privilège : lecture du dépôt, écriture Pages uniquement.

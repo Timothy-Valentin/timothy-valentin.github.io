@@ -73,7 +73,19 @@ _authentification multifacteur_, _hameçonnage_.
 **Outil d'agrégation : les flux RSS dans Inoreader.** Plutôt que de consulter chaque site un par
 un, je m'abonne à leurs **flux RSS** : les nouvelles publications arrivent automatiquement dans un
 agrégateur unique, **Inoreader**, où je les classe en dossiers (sources institutionnelles, presse,
-passkeys).
+passkeys). La liste de mes abonnements est disponible au format OPML, un format standard que tout
+agrégateur RSS sait importer.
+
+**Fil d'actualités automatique sur ce portfolio.** En complément, le [fil d'actualités](../actualites/)
+de ce site rassemble chaque jour les dernières publications de mes sources, et met en avant celles
+qui contiennent un mot-clé de mon sujet. Il est actualisé automatiquement chaque matin par
+GitHub Actions, sans intervention de ma part. Deux niveaux de mots-clés limitent le bruit :
+
+- les mots-clés **spécifiques** (_passkey_, _FIDO_, _WebAuthn_, _sans mot de passe_) sont recherchés dans le titre et le résumé ;
+- les mots-clés **plus larges** (_mot de passe_, _MFA_, _hameçonnage_…) ne sont recherchés que dans le titre.
+
+Ce tri automatique ne remplace pas le travail de veille : il me fait gagner du temps sur la
+collecte, mais la lecture, la vérification et la synthèse restent manuelles.
 
 ### 3. Trier
 
