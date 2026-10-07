@@ -1,0 +1,48 @@
+name: Récapitulatif hebdomadaire de veille
+
+on:
+  # Chaque lundi à 8 h (heure de Paris en été)
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+# Moindre privilège : lecture du dépôt, écriture des tickets uniquement.
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  recapitulatif:
+    name: Articles de la semaine sur les passkeys
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupération du code
+        uses: actions/checkout@v7
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Collecte et tri des articles
+        run: node scripts/veille-hebdo.ts "$RUNNER_TEMP/recap.md"
+
+      # Le ticket est assigné au propriétaire du dépôt : GitHub lui envoie l'e-mail.
+      - name: Publication du récapitulatif
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ! -f "$RUNNER_TEMP/recap.md" ]; then
+            echo "Aucun article cette semaine : pas de récapitulatif."
+            exit 0
+          fi
+          gh label create veille --color 1e3a70 --description "Récapitulatifs de veille technologique" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "$(cat "$RUNNER_TEMP/recap.md.titre")" \
+            --body-file "$RUNNER_TEMP/recap.md" \
+            --label veille \
+            --assignee "$GITHUB_REPOSITORY_OWNER"

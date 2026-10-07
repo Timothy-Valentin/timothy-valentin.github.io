@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser';
-import { MOTS_CLES_FORTS, MOTS_CLES_LARGES, SOURCES, type Source } from '@/config/veille-sources';
+import { MOTS_CLES_FORTS, MOTS_CLES_LARGES, SOURCES, type Source } from '../config/veille-sources.ts';
 
 export interface Article {
   titre: string;
@@ -101,7 +101,16 @@ export function collecter(): Promise<Collecte> {
     const valides = articles
       .filter((a) => a.titre && a.lien.startsWith('http') && !Number.isNaN(a.date.valueOf()))
       .sort((a, b) => b.date.valueOf() - a.date.valueOf());
-    return { articles: valides, enEchec, date: new Date() };
+    // Dédoublonnage : un même communiqué repris par plusieurs sites n'est gardé qu'une fois
+    // (titre comparé sans le suffixe « - Nom du site » ajouté par les agrégateurs).
+    const vus = new Set<string>();
+    const uniques = valides.filter((a) => {
+      const cle = normaliser(a.titre.replace(/ - [^-]+$/, '')).trim();
+      if (vus.has(cle)) return false;
+      vus.add(cle);
+      return true;
+    });
+    return { articles: uniques, enEchec, date: new Date() };
   })();
   return cache;
 }
@@ -114,9 +123,20 @@ const motifs = (mots: string[]) =>
 const FORTS = motifs(MOTS_CLES_FORTS);
 const LARGES = motifs(MOTS_CLES_LARGES);
 
-/** Vrai si l'article concerne le sujet de veille. */
-export function surLeSujet(a: Article): boolean {
+/**
+ * Niveau de pertinence d'un article pour le sujet de veille :
+ * « fort » = mot-clé spécifique aux passkeys (titre ou résumé),
+ * « large » = mot-clé d'authentification générale (titre seulement).
+ */
+export function niveauSujet(a: Article): 'fort' | 'large' | null {
   const titre = normaliser(a.titre);
   const tout = normaliser(`${a.titre} ${a.resume}`);
-  return FORTS.some((m) => m.test(tout)) || LARGES.some((m) => m.test(titre));
+  if (FORTS.some((m) => m.test(tout))) return 'fort';
+  if (LARGES.some((m) => m.test(titre))) return 'large';
+  return null;
+}
+
+/** Vrai si l'article concerne le sujet de veille. */
+export function surLeSujet(a: Article): boolean {
+  return niveauSujet(a) !== null;
 }

@@ -20,6 +20,8 @@ export const SOURCES: Source[] = [
   { nom: 'Cybermalveillance.gouv.fr', flux: 'https://www.cybermalveillance.gouv.fr/feed/atom-flux-actualites', site: 'https://www.cybermalveillance.gouv.fr/', categorie: 'officiel', auto: true },
   { nom: 'CNIL', flux: 'https://www.cnil.fr/fr/rss.xml', site: 'https://www.cnil.fr/', categorie: 'officiel', auto: true },
   { nom: 'The Hacker News', flux: 'https://feeds.feedburner.com/TheHackersNews', site: 'https://thehackernews.com/', categorie: 'presse', auto: true },
+  { nom: 'Google Actualités — recherche « passkey » (français)', flux: 'https://news.google.com/rss/search?q=passkey+OR+passkeys+OR+FIDO2+OR+WebAuthn&hl=fr&gl=FR&ceid=FR:fr', site: 'https://news.google.com/search?q=passkey&hl=fr', categorie: 'presse', auto: true },
+  { nom: 'Google Actualités — recherche « passkey » (anglais)', flux: 'https://news.google.com/rss/search?q=passkey+OR+passkeys+OR+FIDO2+OR+WebAuthn&hl=en-US&gl=US&ceid=US:en', site: 'https://news.google.com/search?q=passkey&hl=en-US', categorie: 'presse', auto: true },
   { nom: 'ZATAZ', flux: 'https://www.zataz.com/feed/', site: 'https://www.zataz.com/', categorie: 'presse', auto: true },
   { nom: 'Google Security Blog', flux: 'https://security.googleblog.com/feeds/posts/default', site: 'https://security.googleblog.com/', categorie: 'editeur', auto: true },
   { nom: 'GitHub Blog — Sécurité', flux: 'https://github.blog/security/feed/', site: 'https://github.blog/security/', categorie: 'editeur', auto: true },
@@ -34,8 +36,6 @@ export const SOURCES: Source[] = [
  */
 export const MOTS_CLES_FORTS = [
   'passkey',
-  "cle d'acces",
-  "cles d'acces",
   'fido',
   'webauthn',
   'sans mot de passe',
