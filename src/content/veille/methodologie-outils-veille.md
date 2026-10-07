@@ -1,7 +1,7 @@
 ---
 title: "Méthodologie et outils de veille"
 description: "La démarche de veille technologique et réglementaire mise en place dans le cadre du BTS SIO : définition du sujet, sources institutionnelles (ANSSI, CERT-FR), agrégation des flux RSS, tri, vérification et restitution."
-miseAJour: 2026-09-28
+miseAJour: 2026-10-07
 type: methodologie
 tags:
   - Méthodologie
@@ -83,6 +83,20 @@ GitHub Actions, sans intervention de ma part. Deux niveaux de mots-clés limiten
 
 - les mots-clés **spécifiques** (_passkey_, _FIDO_, _WebAuthn_, _sans mot de passe_) sont recherchés dans le titre et le résumé ;
 - les mots-clés **plus larges** (_mot de passe_, _MFA_, _hameçonnage_…) ne sont recherchés que dans le titre.
+
+**Récapitulatif hebdomadaire.** Chaque lundi, une tâche planifiée rassemble les articles des sept
+derniers jours et les publie sous forme de ticket sur le dépôt GitHub de ce portfolio. Le ticket
+m'est assigné, ce qui déclenche une notification de GitHub. Il sépare deux groupes : les articles
+qui portent **spécifiquement sur les passkeys**, puis ceux qui traitent de l'authentification en
+général. Pour alimenter le premier groupe, une recherche d'actualités ciblée sur le mot
+« passkey » complète mes sources, en français et en anglais.
+
+Deux limites sont à garder en tête :
+
+- cette recherche est un **agrégateur de presse** : ses liens ne pointent pas vers la source
+  d'origine, qu'il faut donc retrouver avant d'utiliser une information ;
+- un même communiqué repris à l'identique par plusieurs sites n'est conservé qu'une fois, mais
+  des reprises reformulées peuvent subsister.
 
 Ce tri automatique ne remplace pas le travail de veille : il me fait gagner du temps sur la
 collecte, mais la lecture, la vérification et la synthèse restent manuelles.
