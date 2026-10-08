@@ -15,7 +15,7 @@ outils:
   - "VLAN 802.1Q"
   - "Router-on-a-stick"
   - "DHCP"
-ordre: 3
+ordre: 4
 ---
 
 ## Contexte
