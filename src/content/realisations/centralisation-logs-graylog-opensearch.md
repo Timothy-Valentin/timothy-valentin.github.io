@@ -97,12 +97,6 @@ services:
       GRAYLOG_ROOT_PASSWORD_SHA2: "<empreinte SHA-256 du mot de passe>"
 ```
 
-Génération de l'empreinte :
-
-```bash
-echo -n "MotDePasse" | sha256sum
-```
-
 ## Collecte des journaux
 
 ### 1. L'entrée (Input) dans Graylog
@@ -129,8 +123,6 @@ Sur le serveur lui-même et sur la machine cliente, une règle de transfert est 
 - un seul `@` : envoi en **UDP** (deux `@@` signifieraient TCP) ;
 - `RSYSLOG_SyslogProtocol23Format` : messages au format normalisé **RFC 5424**, que Graylog
   découpe correctement (date, machine, application, message).
-
-Le service est ensuite redémarré avec `sudo systemctl restart rsyslog`.
 
 ### 3. Validation
 
@@ -192,20 +184,10 @@ la ranger dans un champ à part, sur lequel on peut ensuite filtrer et faire des
 | Condition | Le message contient la chaîne `.service` |
 | Champ de destination | `extracted_service` |
 
-L'expression, de la forme `([\w@-]+)\.service`, capture le nom du service systemd cité dans le
-message : `packagekit`, `man-db`… La condition évite d'appliquer l'expression régulière à tous
+L'expression capture le nom du service systemd cité dans le message : `packagekit`,
+`man-db`… La condition évite d'appliquer l'expression régulière à tous
 les messages et **économise le processeur** : elle n'est évaluée que sur ceux qui peuvent
 correspondre.
-
-## Vérifications
-
-| Vérification | Méthode |
-| --- | --- |
-| Les trois conteneurs sont démarrés et stables | `docker compose ps` |
-| L'entrée Syslog reçoit des messages | `logger` sur chaque machine, puis recherche dans Graylog |
-| Le compte `observateur` ne peut rien modifier | Connexion avec ce compte : les menus d'administration sont inaccessibles |
-| Les messages sont rangés dans le bon flux | Consultation du stream **Serveurs Linux** |
-| Le champ `extracted_service` est alimenté | Recherche `_exists_:extracted_service` |
 
 ## Résultat
 
@@ -221,8 +203,7 @@ consultables par un compte qui ne peut rien modifier, et leur volume sur le disq
   pré-démarrage masque les avertissements de compatibilité. C'est un contournement acceptable en
   laboratoire, imposé par le matériel ; en production, il faudrait un processeur compatible AVX
   et des versions maintenues.
-- **Suite prévue** : tableaux de bord construits sur le champ `extracted_service` et alertes sur
-  les événements sensibles (échecs d'authentification, par exemple).
+- Le champ `extracted_service` prépare la suite logique : des **tableaux de bord** par service.
 
 ## Bilan
 
