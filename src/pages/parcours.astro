@@ -35,6 +35,7 @@ const experiences = [
     detail:
       'Recueil des besoins et proposition d’infrastructure pour un bâtiment judiciaire, soutenance devant un jury de spécialistes, maquette physique et résolution de pannes réseau.',
     lien: 'realisations/deploiement-reseau-nouveau-batiment-justice/',
+    rapport: 'documents/rapport-de-stage-ministere-justice.pdf',
   },
   {
     titre: 'Alternance — Préparateur physique, SD Sport et Santé',
@@ -43,6 +44,7 @@ const experiences = [
     detail:
       'Préparation physique et coaching de particuliers comme de sportifs professionnels, en football et dans d’autres disciplines.',
     lien: null,
+    rapport: null,
   },
   {
     titre: 'Stage — Coach sportif, L’Orange Bleue',
@@ -50,6 +52,7 @@ const experiences = [
     periode: 'DEUST Métiers de la forme, 2e année',
     detail: 'Stage de coach sportif en salle de sport, en 2e année de DEUST.',
     lien: null,
+    rapport: null,
   },
   {
     titre: 'Stage — Coach sportif, Gymnasia',
@@ -57,6 +60,7 @@ const experiences = [
     periode: 'DEUST Métiers de la forme, 1re année',
     detail: 'Stage de coach sportif en salle de sport.',
     lien: null,
+    rapport: null,
   },
 ];
 ---
@@ -140,6 +144,11 @@ const experiences = [
               {e.lien && (
                 <a href={url(e.lien)} class="link mt-1 inline-block text-sm">
                   Voir la fiche de réalisation →
+                </a>
+              )}
+              {e.rapport && (
+                <a href={url(e.rapport)} class="link mt-1 ml-4 inline-block text-sm">
+                  Lire le rapport de stage (PDF, version publique) →
                 </a>
               )}
             </li>
