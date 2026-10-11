@@ -97,9 +97,13 @@ créer la GPO, la lier à l'unité d'organisation, forcer l'application sur un p
 
 ### 7. Les sauvegardes
 
-Des **sauvegardes** ont été mises en place pour pouvoir remettre l'infrastructure en service en
-cas de panne, d'erreur de manipulation ou d'attaque. Sans sauvegarde, la perte d'un seul serveur
-(annuaire, DHCP) paralyserait tout le réseau.
+Les machines virtuelles sont **sauvegardées depuis Proxmox VE**. Je récupère ensuite ces
+sauvegardes sur **mon ordinateur personnel** : si le serveur lui-même tombe en panne, une copie
+existe ailleurs. Une sauvegarde qui reste sur la machine qu'elle protège disparaît avec elle.
+
+Ces sauvegardes permettent de remettre l'infrastructure en service en cas de panne, d'erreur de
+manipulation ou d'attaque. Sans elles, la perte d'un seul serveur (annuaire, DHCP) paralyserait
+tout le réseau.
 
 ## Vérifications
 
