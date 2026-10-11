@@ -23,6 +23,11 @@ Pour ma recherche de stage et d'alternance, et pour l'épreuve du BTS, j'avais b
 **présence en ligne professionnelle** : un site qui présente mon parcours, mes réalisations et
 les compétences qu'elles démontrent, accessible par un simple lien.
 
+J'ai appris les bases du **HTML** et du **CSS** en cours. J'avais commencé une première version
+de ce portfolio avec **WordPress**, mais je l'ai rapidement abandonnée : elle me demandait
+beaucoup de temps pour un résultat qui ne me convenait pas. J'ai donc choisi une autre solution,
+plus simple à faire évoluer : un site statique.
+
 ## Objectifs
 
 - Un site **clair et rapide**, lisible sur ordinateur comme sur téléphone.
