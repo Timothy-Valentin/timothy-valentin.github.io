@@ -1,90 +1,177 @@
 ---
 import { getCollection } from 'astro:content';
+import { CircleCheck, CircleDashed, ExternalLink } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import { BLOCS, CONTEXTES } from '@/config/referentiel';
+import { ACTIVITES, SUIVI_PEDAGOGIQUE, TOUS_SAVOIRS } from '@/config/savoirs';
+import { TEINTE, iconeFiche } from '@/config/visuels';
 import { url } from '@/utils/url';
 
 const realisations = (await getCollection('realisations', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.ordre - b.data.ordre,
 );
-
+const parId = new Map(realisations.map((r) => [r.id, r]));
 const preuves = (id: string) => realisations.filter((r) => (r.data.competences as string[]).includes(id));
+const nbSavoirs = TOUS_SAVOIRS.filter((s) => s.valide).length;
+const lien = (href: string) => (href.startsWith('http') ? href : url(href));
 ---
 
 <BaseLayout
   title="Tableau de synthèse des compétences"
-  description="Tableau de synthèse des compétences du référentiel BTS SIO SISR (blocs 1, 2 et 3) mobilisées dans les réalisations de Timothy Valentin."
+  description="Tableau de synthèse des compétences du référentiel BTS SIO SISR (blocs 1, 2 et 3) et suivi des savoirs S1 à S18, reliés aux réalisations de Timothy Valentin."
 >
-  <div class="container-page py-10">
-    <PageHeader
-      eyebrow="Référentiel BTS SIO — option SISR"
-      title="Tableau de synthèse des compétences"
-      intro="Pour chaque compétence du référentiel, les réalisations qui la démontrent. Cliquez sur une réalisation pour ouvrir sa fiche. Ce tableau est tenu à jour au fil de la formation."
-    />
+  <PageHeader
+    eyebrow="Référentiel BTS SIO — option SISR"
+    title="Tableau de synthèse des compétences"
+    intro="Pour chaque compétence du référentiel, les réalisations qui la démontrent, puis le suivi des savoirs du bloc 1. Ce tableau est tenu à jour au fil de la formation."
+  />
 
+  <div class="container-page py-10">
+    <!-- Vue d'ensemble -->
+    <ul class="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4" aria-label="Vue d'ensemble">
+      {
+        BLOCS.map((b) => {
+          const ok = b.competences.filter((c) => preuves(c.id).length > 0).length;
+          return (
+            <li>
+              <a href={`#${b.id}`} class="card card-link block h-full">
+                <p class="text-sm font-bold">{b.titre.split(' — ')[0]}</p>
+                <p class="muted mt-0.5 text-sm">{b.titre.split(' — ')[1].replace(' (option SISR)', '')}</p>
+                <div class="dots mt-3">
+                  {b.competences.map((_, n) => <i class:list={[n >= ok && 'off']} />)}
+                </div>
+                <p class="mt-2 text-sm"><strong>{ok} / {b.competences.length}</strong> <span class="muted">compétences démontrées</span></p>
+              </a>
+            </li>
+          );
+        })
+      }
+      <li>
+        <a href="#savoirs" class="card card-link block h-full">
+          <p class="text-sm font-bold">Savoirs du bloc 1</p>
+          <p class="muted mt-0.5 text-sm">S1 à S18</p>
+          <div class="dots mt-3">{TOUS_SAVOIRS.map((s) => <i class:list={[!s.valide && 'off']} />)}</div>
+          <p class="mt-2 text-sm"><strong>{nbSavoirs} / {TOUS_SAVOIRS.length}</strong> <span class="muted">savoirs validés</span></p>
+        </a>
+      </li>
+    </ul>
+
+    <!-- Compétences par bloc -->
     {
       BLOCS.map((bloc) => (
-        <section class="mt-12" aria-labelledby={bloc.id}>
-          <h2 id={bloc.id} class="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-50">
-            {bloc.titre}
-          </h2>
-          <div class="mt-4 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800">
-            <table class="w-full text-left text-sm">
-              <thead class="bg-slate-50 text-xs text-slate-500 uppercase dark:bg-slate-900">
-                <tr>
-                  <th class="w-1/2 px-4 py-2.5 font-medium">Compétence</th>
-                  <th class="px-4 py-2.5 font-medium">Réalisations</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
-                {bloc.competences.map((c) => {
-                  const liste = preuves(c.id);
-                  return (
-                    <tr id={c.id} class="align-top target:bg-brand-50 dark:target:bg-brand-400/10">
-                      <td class="px-4 py-3 text-slate-800 dark:text-slate-200">{c.label}</td>
-                      <td class="px-4 py-3">
-                        {liste.length > 0 ? (
-                          <ul class="flex flex-wrap gap-1.5">
-                            {liste.map((r) => (
-                              <li>
-                                <a
-                                  href={url(`realisations/${r.id}/`)}
-                                  class="badge hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-300"
-                                  title={`${CONTEXTES[r.data.contexte]} — ${r.data.title}`}
-                                >
-                                  {r.data.court}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <span class="text-xs text-slate-400 italic">À couvrir en 2e année</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+        <section class="mt-14" aria-labelledby={bloc.id}>
+          <h2 id={bloc.id} class="text-xl font-extrabold tracking-tight scroll-mt-24">{bloc.titre}</h2>
+          <ul class="card mt-4 divide-y divide-[var(--line)] p-0">
+            {bloc.competences.map((c) => {
+              const liste = preuves(c.id);
+              return (
+                <li id={c.id} class="grid scroll-mt-24 gap-3 px-5 py-4 target:bg-[var(--brand-soft)] md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] md:items-center">
+                  <p class="flex items-start gap-2.5 font-semibold">
+                    {liste.length > 0 ? (
+                      <CircleCheck class="mt-0.5 size-5 shrink-0 text-[var(--ok)]" aria-label="Démontrée" />
+                    ) : (
+                      <CircleDashed class="muted mt-0.5 size-5 shrink-0" aria-label="À démontrer" />
+                    )}
+                    {c.label}
+                  </p>
+                  {liste.length > 0 ? (
+                    <ul class="flex flex-wrap gap-1.5">
+                      {liste.map((r) => {
+                        const I = iconeFiche(r.id);
+                        return (
+                          <li class={TEINTE[r.data.contexte]}>
+                            <a href={url(`realisations/${r.id}/`)} class="pill" title={`${CONTEXTES[r.data.contexte]} — ${r.data.title}`}>
+                              <I class="size-3.5 text-[var(--c)]" aria-hidden="true" /> {r.data.court}
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <p class="muted text-sm italic">À démontrer en 2e année</p>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </section>
       ))
     }
 
-    <section class="mt-12 card" aria-labelledby="legende">
-      <h2 id="legende" class="font-semibold text-slate-900 dark:text-slate-100">Réalisations référencées</h2>
-      <ul class="mt-3 space-y-1.5 text-sm">
+    <!-- Savoirs du bloc 1 -->
+    <section class="mt-16" aria-labelledby="savoirs">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h2 id="savoirs" class="text-xl font-extrabold tracking-tight scroll-mt-24">Savoirs du bloc 1 — S1 à S18</h2>
+          <p class="muted mt-1.5 max-w-3xl">
+            Un savoir n'est marqué validé que s'il a été mis en œuvre lors d'un TP, d'un atelier ou d'un stage, avec sa
+            preuve. Les savoirs non validés sont à travailler d'ici l'examen.
+          </p>
+        </div>
+        <a href={SUIVI_PEDAGOGIQUE} rel="noopener" class="btn btn-ghost">Mon suivi pédagogique <ExternalLink class="size-4" aria-hidden="true" /></a>
+      </div>
+
+      {
+        ACTIVITES.map((a) => (
+          <div class="mt-8">
+            <h3 class="font-bold"><span class="muted">Activité {a.code} —</span> {a.titre}</h3>
+            <ul class="mt-3 grid gap-3 md:grid-cols-2">
+              {a.savoirs.map((s) => (
+                <li id={s.code} class:list={['card scroll-mt-24 target:border-[var(--brand-2)]', !s.valide && 'bg-[var(--bg-soft)]']}>
+                  <div class="flex items-start justify-between gap-3">
+                    <p class="font-bold">
+                      <span class="mr-1.5 rounded-md bg-[var(--brand-soft)] px-1.5 py-0.5 text-sm text-[var(--brand-2)]">{s.code}</span>
+                      {s.titre}
+                    </p>
+                    {s.valide ? (
+                      <span class="tag shrink-0" style="--c: var(--ok); --c-soft: var(--ok-soft)">Validé</span>
+                    ) : (
+                      <span class="tag muted shrink-0" style="--c: var(--muted); --c-soft: var(--line)">À venir</span>
+                    )}
+                  </div>
+                  <p class="muted mt-1.5 text-sm">{s.detail}</p>
+                  {s.preuve && <p class="mt-3 text-[0.9rem]"><strong>Preuve :</strong> {s.preuve}</p>}
+                  {(s.fiches?.length || s.liens?.length) && (
+                    <ul class="mt-3 flex flex-wrap gap-1.5">
+                      {s.fiches?.map((id) => {
+                        const r = parId.get(id);
+                        return r ? (
+                          <li class={TEINTE[r.data.contexte]}>
+                            <a href={url(`realisations/${id}/`)} class="pill">{r.data.court}</a>
+                          </li>
+                        ) : null;
+                      })}
+                      {s.liens?.map((l) => (
+                        <li><a href={lien(l.href)} rel={l.href.startsWith('http') ? 'noopener' : undefined} class="pill">{l.label}</a></li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </section>
+
+    <!-- Réalisations référencées -->
+    <section class="mt-16" aria-labelledby="legende">
+      <h2 id="legende" class="text-xl font-extrabold tracking-tight">Réalisations référencées</h2>
+      <ul class="card mt-4 divide-y divide-[var(--line)] p-0">
         {
-          realisations.map((r) => (
-            <li>
-              <span class="badge mr-2">{r.data.court}</span>
-              <a href={url(`realisations/${r.id}/`)} class="link">
-                {r.data.title}
-              </a>
-              <span class="text-slate-500"> — {CONTEXTES[r.data.contexte]}, {r.data.periode}</span>
-            </li>
-          ))
+          realisations.map((r) => {
+            const I = iconeFiche(r.id);
+            return (
+              <li class:list={['flex items-center gap-3.5 px-5 py-3.5', TEINTE[r.data.contexte]]}>
+                <span class="tile tile-sm"><I class="size-[1.05rem]" aria-hidden="true" /></span>
+                <span class="min-w-0">
+                  <a href={url(`realisations/${r.id}/`)} class="font-semibold hover:text-[var(--brand-2)]">{r.data.title}</a>
+                  <span class="muted block text-sm">{CONTEXTES[r.data.contexte]} · {r.data.periode}</span>
+                </span>
+              </li>
+            );
+          })
         }
       </ul>
     </section>

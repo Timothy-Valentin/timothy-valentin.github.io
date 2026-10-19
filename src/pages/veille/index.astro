@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { BookOpen, Newspaper, Rss } from '@lucide/astro';
+import { ArrowRight, BookOpen, Download, CircleQuestionMark, Newspaper, Rss } from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import { formatDate, url } from '@/utils/url';
@@ -14,59 +14,67 @@ const fiches = (await getCollection('veille', ({ data }) => !data.draft)).sort(
   title="Veille technologique"
   description="Veille technologique de Timothy Valentin : les passkeys (clés d'accès FIDO2) qui remplacent les mots de passe, et la méthode de veille suivie (flux RSS, ANSSI, CNIL, CERT-FR)."
 >
-  <div class="container-page py-10">
-    <PageHeader
-      eyebrow="Veille technologique"
-      title="Les passkeys, vers la fin des mots de passe"
-      intro="Mots de passe faibles, réutilisés, hameçonnés : les passkeys proposent de les remplacer par une paire de clés cryptographiques, déverrouillée par une empreinte ou un code PIN."
-    />
+  <PageHeader
+    eyebrow="Veille technologique"
+    title="Les passkeys, vers la fin des mots de passe"
+    intro="Mots de passe faibles, réutilisés, hameçonnés : les passkeys proposent de les remplacer par une paire de clés cryptographiques, déverrouillée par une empreinte ou un code PIN."
+  />
 
-    <section class="mt-10 rounded-lg border-l-4 border-brand-700 bg-slate-50 p-5 dark:border-brand-300 dark:bg-slate-900" aria-labelledby="problematique">
-      <h2 id="problematique" class="text-sm font-semibold text-brand-800 dark:text-brand-300">Problématique</h2>
-      <p class="mt-2 text-slate-700 dark:text-slate-300">
-        Les passkeys peuvent-elles remplacer les mots de passe, pour le grand public comme en
-        entreprise ? Et que changent-elles pour la sécurité des comptes et pour le travail d'un
-        administrateur systèmes et réseaux ?
-      </p>
+  <div class="container-page py-10">
+    <section class="card shadowed flex gap-4" aria-labelledby="problematique">
+      <span class="tile"><CircleQuestionMark class="size-6" aria-hidden="true" /></span>
+      <div>
+        <h2 id="problematique" class="font-bold">Problématique</h2>
+        <p class="muted mt-1.5 text-[1.02rem]">
+          Les passkeys peuvent-elles remplacer les mots de passe, pour le grand public comme en entreprise ? Et que
+          changent-elles pour la sécurité des comptes et pour le travail d'un administrateur systèmes et réseaux ?
+        </p>
+      </div>
     </section>
 
-    <section class="mt-8 grid gap-4 md:grid-cols-2" aria-label="Fiches de veille">
+    <section class="mt-8 grid gap-4.5 md:grid-cols-2" aria-label="Fiches de veille">
       {
         fiches.map((f) => {
-          const Icon = f.data.type === 'synthese' ? BookOpen : Rss;
+          const synthese = f.data.type === 'synthese';
+          const Icone = synthese ? BookOpen : Rss;
           return (
-            <a href={url(`veille/${f.id}/`)} class="card card-link group flex flex-col">
-              <div class="flex items-center justify-between text-xs text-slate-500">
-                <span class="badge badge-accent">
-                  {f.data.type === 'synthese' ? 'Fiche de synthèse' : 'Méthode de veille'}
-                </span>
-                <span>
+            <a href={url(`veille/${f.id}/`)} class:list={['card card-link flex flex-col', synthese && 'panel-brand']}>
+              <div class="flex items-center justify-between gap-3">
+                <Icone class="size-7" aria-hidden="true" />
+                <span class:list={['text-xs', synthese ? 'muted' : 'muted']}>
                   Mise à jour le <time datetime={f.data.miseAJour.toISOString()}>{formatDate(f.data.miseAJour)}</time>
                 </span>
               </div>
-              <Icon class="mt-4 size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-              <h2 class="mt-2 font-semibold text-slate-900 group-hover:text-brand-700 dark:text-slate-100 dark:group-hover:text-brand-300">
-                {f.data.title}
-              </h2>
-              <p class="mt-2 flex-1 text-sm text-slate-600 dark:text-slate-400">{f.data.description}</p>
+              <p class="mt-4 text-xs font-bold tracking-wide uppercase opacity-80">{synthese ? 'Fiche de synthèse' : 'Méthode de veille'}</p>
+              <h2 class="mt-1 text-xl font-bold">{f.data.title}</h2>
+              <p class="muted mt-2 flex-1">{f.data.description}</p>
+              <span class="mt-5 inline-flex items-center gap-1.5 font-semibold">Lire la fiche <ArrowRight class="size-4" aria-hidden="true" /></span>
             </a>
           );
         })
       }
     </section>
 
-    <a href={url('veille/actualites/')} class="card card-link group mt-4 flex items-center gap-4">
-      <Newspaper class="size-6 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-      <span class="min-w-0">
-        <span class="badge badge-accent">Mis à jour chaque jour</span>
-        <span class="mt-2 block font-semibold text-slate-900 group-hover:text-brand-700 dark:text-slate-100 dark:group-hover:text-brand-300">
-          Fil d'actualités de ma veille
+    <section class="mt-4.5 grid gap-4.5 md:grid-cols-[1.3fr_1fr]" aria-label="Outils de veille">
+      <a href={url('veille/actualites/')} class="card card-link flex gap-4">
+        <span class="tile"><Newspaper class="size-6" aria-hidden="true" /></span>
+        <span class="min-w-0">
+          <span class="live">Mis à jour chaque jour</span>
+          <span class="mt-2 block text-lg font-bold">Fil d'actualités de ma veille</span>
+          <span class="muted mt-1 block">
+            Les dernières publications de mes sources (CERT-FR, ANSSI, CNIL, presse spécialisée), collectées
+            automatiquement et filtrées sur les passkeys et l'authentification.
+          </span>
         </span>
-        <span class="mt-1 block text-sm text-slate-600 dark:text-slate-400">
-          Les dernières publications de mes sources (CERT-FR, ANSSI, CNIL, presse spécialisée),
-          collectées automatiquement et filtrées sur les passkeys et l'authentification.
-        </span>
-      </span>
-    </a>
+      </a>
+      <div class="card flex flex-col">
+        <span class="tile"><Download class="size-6" aria-hidden="true" /></span>
+        <p class="mt-4 text-lg font-bold">Mes abonnements</p>
+        <p class="muted mt-1 flex-1">La liste de mes sources au format OPML, importable dans un agrégateur RSS comme Inoreader.</p>
+        <a href={url('veille/abonnements-veille.opml')} download class="link mt-4 inline-flex items-center gap-1.5">
+          Télécharger la liste <Download class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+    </section>
   </div>
 </BaseLayout>

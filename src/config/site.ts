@@ -23,13 +23,13 @@ export const SITE = {
     'Stage de 2e année de BTS SIO',
     'Alternance en cybersécurité pour la rentrée 2027 (SOC, administration systèmes et réseaux sécurisés)',
   ],
+  /** Version courte de la recherche, pour les pastilles de l'accueil. */
+  rechercheCourte: ['Stage de 2e année', 'Alternance en cybersécurité — rentrée 2027'],
 };
 
 export const NAV = [
-  { href: '', label: 'Accueil' },
-  { href: 'parcours/', label: 'Parcours' },
   { href: 'realisations/', label: 'Réalisations' },
   { href: 'competences/', label: 'Compétences' },
+  { href: 'parcours/', label: 'Parcours' },
   { href: 'veille/', label: 'Veille' },
-  { href: 'contact/', label: 'Contact' },
 ] as const;

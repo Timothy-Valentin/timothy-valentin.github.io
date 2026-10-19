@@ -10,7 +10,7 @@ Portfolio professionnel de BTS SIO option SISR (lycée Henri Matisse, Cugnaux).
 | --- | --- |
 | [Parcours](https://timothy-valentin.github.io/parcours/) | Formation, stages et alternances, certifications, rapport de stage |
 | [Réalisations](https://timothy-valentin.github.io/realisations/) | Une fiche par réalisation : contexte, objectifs, démarche, résultat, compétences mobilisées |
-| [Compétences](https://timothy-valentin.github.io/competences/) | Tableau de synthèse : chaque compétence du référentiel BTS SIO reliée aux réalisations qui la démontrent |
+| [Compétences](https://timothy-valentin.github.io/competences/) | Tableau de synthèse : chaque compétence du référentiel BTS SIO reliée aux réalisations qui la démontrent, et suivi des savoirs S1 à S18 |
 | [Veille](https://timothy-valentin.github.io/veille/) | Veille technologique sur les passkeys, méthode de veille et fil d'actualités |
 | [Contact](https://timothy-valentin.github.io/contact/) | E-mail et profils professionnels |
 
@@ -34,6 +34,9 @@ Deux tâches sont automatisées avec GitHub Actions :
 | `src/content/veille/` | Les fiches de veille |
 | `src/config/site.ts` | Coordonnées et liens (e-mail, LinkedIn, Root-Me, TryHackMe, CV) |
 | `src/config/referentiel.ts` | Compétences du référentiel BTS SIO |
+| `src/config/savoirs.ts` | Savoirs du bloc 1 (S1 à S18) : statut et preuves, repris du suivi pédagogique |
+| `src/config/parcours.ts` | Formation, expériences, certifications et entraînement |
+| `src/config/visuels.ts` | Icône de chaque réalisation et couleur de chaque contexte |
 | `src/config/veille-sources.ts` | Sources et mots-clés de la veille |
 | `src/pages/` | Les pages du site |
 | `scripts/veille-hebdo.ts` | Script du récapitulatif hebdomadaire |
@@ -50,7 +53,8 @@ Le contenu se modifie dans des fichiers texte, sans toucher au code :
 | Ajouter le lien vers la documentation d'un TP | champ `documentation:` en haut de la fiche |
 | Modifier la veille | `src/content/veille/*.md` |
 | Ajouter une source ou un mot-clé de veille | `src/config/veille-sources.ts` |
-| Modifier mon parcours | `src/pages/parcours.astro` |
+| Modifier mon parcours, mes certifications | `src/config/parcours.ts` |
+| Valider un savoir (S1 à S18) et indiquer sa preuve | `src/config/savoirs.ts` |
 
 **Ajouter le CV :** déposer le PDF dans `public/` (par exemple `public/cv-timothy-valentin.pdf`),
 puis renseigner `cv: 'cv-timothy-valentin.pdf'` dans `src/config/site.ts`. Les boutons

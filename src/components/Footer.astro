@@ -1,39 +1,42 @@
 ---
-import { Flag, Mail, Target } from '@lucide/astro';
+import { Flag, Mail, ShieldCheck, Target } from '@lucide/astro';
 import BrandIcon from './BrandIcon.astro';
-import { SITE } from '@/config/site';
+import { NAV, SITE } from '@/config/site';
+import { url } from '@/utils/url';
 
 const year = new Date().getFullYear();
-const lien = 'flex items-center gap-1.5 hover:text-brand-700 dark:hover:text-brand-300';
+const lien = 'inline-flex items-center gap-1.5 hover:text-[var(--brand-2)]';
 ---
 
-<footer class="mt-24 border-t border-slate-200 bg-slate-50 py-8 text-sm dark:border-slate-800 dark:bg-slate-950">
-  <div
-    class="container-page flex flex-col gap-4 text-slate-600 sm:flex-row sm:items-center sm:justify-between dark:text-slate-400"
-  >
-    <p class="text-xs">{`© ${year} ${SITE.author} · ${SITE.ecole}`}</p>
-    <ul class="flex flex-wrap items-center gap-4">
-      <li>
-        <a href={`mailto:${SITE.email}`} class={lien}><Mail class="size-3.5" aria-hidden="true" /> E-mail</a>
-      </li>
-      <li>
-        <a href={SITE.github.url} rel="me noopener" class={lien}><BrandIcon name="github" class="size-3.5" /> GitHub</a>
-      </li>
-      {
-        SITE.linkedin && (
-          <li>
-            <a href={SITE.linkedin.url} rel="me noopener" class={lien}>
-              <BrandIcon name="linkedin" class="size-3.5" /> LinkedIn
-            </a>
-          </li>
-        )
-      }
-      <li>
-        <a href={SITE.rootme.url} rel="noopener" class={lien}><Flag class="size-3.5" aria-hidden="true" /> Root-Me</a>
-      </li>
-      <li>
-        <a href={SITE.tryhackme.url} rel="noopener" class={lien}><Target class="size-3.5" aria-hidden="true" /> TryHackMe</a>
-      </li>
-    </ul>
+<footer class="mt-20 border-t border-[var(--line)] bg-[var(--bg-soft)]">
+  <div class="container-page grid gap-8 py-10 text-sm sm:grid-cols-3">
+    <div>
+      <p class="font-bold">{SITE.author}</p>
+      <p class="muted mt-1">{SITE.role}<br />{SITE.ecole}</p>
+    </div>
+    <nav aria-label="Plan du site">
+      <p class="font-bold">Le portfolio</p>
+      <ul class="muted mt-2 space-y-1.5">
+        <li><a href={url()} class="hover:text-[var(--brand-2)]">Accueil</a></li>
+        {NAV.map((n) => <li><a href={url(n.href)} class="hover:text-[var(--brand-2)]">{n.label}</a></li>)}
+        <li><a href={url('contact/')} class="hover:text-[var(--brand-2)]">Contact</a></li>
+      </ul>
+    </nav>
+    <div>
+      <p class="font-bold">Me retrouver</p>
+      <ul class="muted mt-2 space-y-1.5">
+        <li><a href={`mailto:${SITE.email}`} class={lien}><Mail class="size-3.5" aria-hidden="true" /> E-mail</a></li>
+        {SITE.linkedin && <li><a href={SITE.linkedin.url} rel="me noopener" class={lien}><BrandIcon name="linkedin" class="size-3.5" /> LinkedIn</a></li>}
+        <li><a href={SITE.github.url} rel="me noopener" class={lien}><BrandIcon name="github" class="size-3.5" /> GitHub</a></li>
+        <li><a href={SITE.rootme.url} rel="noopener" class={lien}><Flag class="size-3.5" aria-hidden="true" /> Root-Me</a></li>
+        <li><a href={SITE.tryhackme.url} rel="noopener" class={lien}><Target class="size-3.5" aria-hidden="true" /> TryHackMe</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-[var(--line)]">
+    <div class="container-page muted flex flex-wrap items-center justify-between gap-2 py-4 text-xs">
+      <p>{`© ${year} ${SITE.author}`}</p>
+      <a href={url('.well-known/security.txt')} class={lien}><ShieldCheck class="size-3.5" aria-hidden="true" /> Signaler un problème de sécurité</a>
+    </div>
   </div>
 </footer>

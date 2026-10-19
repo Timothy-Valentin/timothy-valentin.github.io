@@ -1,174 +1,226 @@
 ---
 import { getCollection } from 'astro:content';
-import { ArrowRight, BookOpen, Download, Mail, Network, Server, ShieldCheck, TableProperties } from '@lucide/astro';
+import {
+  ArrowRight, Award, BookOpen, Download, FileText, GraduationCap, Landmark, Mail, MapPin, Network, Newspaper, Server, ShieldCheck,
+} from '@lucide/astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import EntryCard from '@/components/EntryCard.astro';
+import RealisationCard from '@/components/RealisationCard.astro';
 import BrandIcon from '@/components/BrandIcon.astro';
 import { SITE } from '@/config/site';
-import { CONTEXTES } from '@/config/referentiel';
+import { BLOCS, COMPETENCE_IDS } from '@/config/referentiel';
+import { TOUS_SAVOIRS } from '@/config/savoirs';
+import { EXPERIENCES, SEMAINES_STAGE_INFO } from '@/config/parcours';
 import { url } from '@/utils/url';
 
 const realisations = (await getCollection('realisations', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.ordre - b.data.ordre,
 );
+const veille = (await getCollection('veille', ({ data }) => !data.draft)).sort((a, b) => a.data.ordre - b.data.ordre);
+const synthese = veille.find((v) => v.data.type === 'synthese');
 
-const blocs = [
+const couvertes = new Set(realisations.flatMap((r) => r.data.competences as string[]));
+const nbCouvertes = COMPETENCE_IDS.filter((c) => couvertes.has(c)).length;
+const nbSavoirs = TOUS_SAVOIRS.filter((s) => s.valide).length;
+const stage = EXPERIENCES[0];
+
+const competences = [
   {
-    icon: Network,
+    icone: Network,
     titre: 'Réseau',
-    items: [
-      'VLAN 802.1Q et routage inter-VLAN',
-      'DHCP : étendues, exclusions, relais',
-      'Pare-feu pfSense',
-      'Cisco Packet Tracer au quotidien',
-      'Configuration en console avec PuTTY',
-      'Diagnostic de pannes par couches OSI',
-    ],
+    items: ['VLAN 802.1Q', 'Routage inter-VLAN', 'DHCP : étendues, exclusions, relais', 'pfSense', 'Cisco Packet Tracer', 'Console PuTTY', 'Diagnostic par couches OSI'],
   },
   {
-    icon: Server,
-    titre: 'Systèmes & virtualisation',
-    items: [
-      'Proxmox VE au quotidien, VirtualBox',
-      'Windows Server : AD DS, DNS, DHCP, GPO',
-      'Clients Windows et Ubuntu',
-      'Mise en place de sauvegardes',
-      'Linux : Debian, Ubuntu, Kali',
-      'Remise en service de serveurs',
-    ],
+    icone: Server,
+    titre: 'Systèmes',
+    items: ['Proxmox VE', 'VirtualBox', 'Windows Server : AD DS, DNS, DHCP, GPO', 'Debian', 'Ubuntu', 'Kali', 'Docker Compose', 'GLPI', 'Sauvegarde des VM'],
   },
   {
-    icon: ShieldCheck,
+    icone: ShieldCheck,
     titre: 'Cybersécurité',
-    items: [
-      'Badge Cisco « Introduction to Cybersecurity »',
-      'Root-Me : 8 challenges Réseau validés',
-      'Analyse de trames avec Wireshark',
-      'Protocoles chiffrés (SSH, HTTPS, SFTP)',
-      'Sécurisation des sessions par GPO',
-      'Veille : les passkeys (FIDO2)',
-    ],
+    items: ['Graylog et OpenSearch', 'Analyse de trames Wireshark', 'SSH, HTTPS, SFTP', 'GPO de sécurité des sessions', 'Comptes en lecture seule', 'Root-Me', 'TryHackMe', 'Veille passkeys'],
   },
 ];
 ---
 
 <BaseLayout>
   <!-- Présentation -->
-  <section class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/40">
-    <div class="container-page py-14 sm:py-20">
-      <p class="eyebrow">{SITE.role}</p>
-      <h1 class="mt-3 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl dark:text-slate-50">
-        {SITE.author}
-      </h1>
-      <p class="mt-5 max-w-2xl text-lg text-slate-700 dark:text-slate-300">
-        En reconversion après une première carrière dans les métiers de la forme, je me forme à
-        l'administration des systèmes et des réseaux au lycée Henri Matisse de Cugnaux, et je
-        m'oriente vers la cybersécurité.
-      </p>
-
-      <div class="mt-6 max-w-2xl rounded-lg border border-brand-200 bg-white p-4 dark:border-brand-400/30 dark:bg-slate-900">
-        <p class="text-sm font-semibold text-brand-800 dark:text-brand-300">Je recherche</p>
-        <ul class="mt-1 list-disc space-y-0.5 pl-5 text-sm text-slate-700 dark:text-slate-300">
-          {SITE.recherche.map((r) => <li>{r}</li>)}
-        </ul>
+  <section class="hero">
+    <div class="container-page grid items-center gap-12 py-14 md:grid-cols-[1.25fr_0.9fr] md:py-20">
+      <div>
+        <p class="eyebrow">{SITE.role}</p>
+        <h1 class="h1 mt-3">Réseaux, systèmes et cybersécurité.</h1>
+        <p class="lead mt-5 max-w-[34em]">
+          En reconversion après une première carrière dans les métiers de la forme, je me forme à l'administration
+          des systèmes et des réseaux au lycée Henri Matisse de Cugnaux, et je m'oriente vers la cybersécurité.
+        </p>
+        <p class="mt-7 text-sm font-bold">Je recherche</p>
+        <ul class="mt-2 flex flex-wrap gap-2.5">{SITE.rechercheCourte.map((r) => <li class="seek">{r}</li>)}</ul>
+        <div class="mt-8 flex flex-wrap gap-2.5">
+          <a href={url('realisations/')} class="btn btn-primary">Voir mes réalisations <ArrowRight class="size-4" aria-hidden="true" /></a>
+          <a href={url('competences/')} class="btn btn-ghost">Tableau de synthèse</a>
+          {SITE.cv && <a href={url(SITE.cv)} download class="btn btn-ghost"><Download class="size-4" aria-hidden="true" /> CV</a>}
+        </div>
       </div>
 
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href={url('realisations/')} class="btn btn-primary">
-          Mes réalisations <ArrowRight class="size-4" aria-hidden="true" />
-        </a>
-        <a href={url('competences/')} class="btn btn-ghost">
-          <TableProperties class="size-4" aria-hidden="true" /> Tableau des compétences
-        </a>
+      <aside class="card shadowed p-6" aria-label="En bref">
+        <div class="flex items-center gap-3.5 border-b border-[var(--line)] pb-5">
+          <span class="grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-[#1e3a70] to-[#2f5fb3] text-xl font-bold text-white">TV</span>
+          <div>
+            <p class="font-bold">{SITE.author}</p>
+            <p class="muted text-sm">BTS SIO SISR · 2025 – 2027</p>
+          </div>
+        </div>
+        <ul class="mt-5 space-y-4 text-[0.95rem]">
+          <li class="flex gap-3">
+            <span class="tile tile-sm"><MapPin class="size-[1.05rem]" aria-hidden="true" /></span>
+            <span>Lycée Henri Matisse<span class="muted block text-sm">Cugnaux (31), près de Toulouse</span></span>
+          </li>
+          <li class="flex gap-3">
+            <span class="tile tile-sm"><Landmark class="size-[1.05rem]" aria-hidden="true" /></span>
+            <span>Stage au Ministère de la Justice<span class="muted block text-sm">DIT, Toulouse · mai – juin 2026</span></span>
+          </li>
+          <li class="flex gap-3">
+            <span class="tile tile-sm"><Award class="size-[1.05rem]" aria-hidden="true" /></span>
+            <span>Introduction to Cybersecurity<span class="muted block text-sm">Cisco Networking Academy</span></span>
+          </li>
+        </ul>
         {
-          SITE.cv && (
-            <a href={url(SITE.cv)} download class="btn btn-ghost">
-              <Download class="size-4" aria-hidden="true" /> CV
+          stage.rapport && (
+            <a href={url(stage.rapport)} class="btn btn-ghost mt-5 w-full justify-center">
+              <FileText class="size-4" aria-hidden="true" /> Rapport de stage (PDF)
             </a>
           )
         }
-        <a href={url('contact/')} class="btn btn-ghost">
-          <Mail class="size-4" aria-hidden="true" /> Contact
-        </a>
-        <a href={SITE.github.url} rel="me noopener" class="btn btn-ghost">
-          <BrandIcon name="github" /> GitHub
-        </a>
-      </div>
+      </aside>
     </div>
   </section>
 
+  <!-- Chiffres clés -->
+  <div class="container-page">
+    <ul class="relative -mt-8 grid grid-cols-2 gap-3.5 md:grid-cols-4" aria-label="Chiffres clés">
+      <li class="stat"><b>{realisations.length}</b><span>réalisations documentées</span></li>
+      <li class="stat"><b>{nbCouvertes} / {COMPETENCE_IDS.length}</b><span>compétences du référentiel démontrées</span></li>
+      <li class="stat"><b>{nbSavoirs} / {TOUS_SAVOIRS.length}</b><span>savoirs du bloc 1 validés</span></li>
+      <li class="stat"><b>{SEMAINES_STAGE_INFO} sem.</b><span>de stage au Ministère de la Justice</span></li>
+    </ul>
+  </div>
+
+  <!-- Réalisations -->
+  <section class="section container-page" aria-labelledby="t-realisations">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Réalisations</p>
+        <h2 id="t-realisations" class="h2 mt-1.5">Ce que j'ai réalisé</h2>
+        <p class="muted mt-2 max-w-2xl">En stage, en formation et en autonomie. Chaque fiche détaille le contexte, la démarche, le résultat et les compétences mobilisées.</p>
+      </div>
+      <a href={url('realisations/')} class="btn btn-ghost">Toutes les réalisations ({realisations.length}) <ArrowRight class="size-4" aria-hidden="true" /></a>
+    </div>
+    <ul class="mt-7 grid gap-4.5 sm:grid-cols-2 lg:grid-cols-3">
+      {realisations.slice(0, 6).map((r) => <li><RealisationCard r={r} /></li>)}
+    </ul>
+  </section>
+
   <!-- Compétences -->
-  <section class="container-page py-14" aria-labelledby="competences">
+  <section class="section container-page" aria-labelledby="t-competences">
     <p class="eyebrow">Compétences</p>
-    <h2 id="competences" class="h2 mt-2">Ce que je sais faire</h2>
-    <p class="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
-      Uniquement des compétences pratiquées en stage, en formation ou en autonomie, et démontrées
-      dans les fiches de réalisation.
-    </p>
-    <div class="mt-8 grid gap-4 md:grid-cols-3">
+    <h2 id="t-competences" class="h2 mt-1.5">Ce que je sais faire</h2>
+    <p class="muted mt-2 max-w-2xl">Uniquement des compétences pratiquées en stage, en formation ou en autonomie, et démontrées dans mes fiches.</p>
+    <div class="mt-7 grid gap-4.5 md:grid-cols-3">
       {
-        blocs.map((bloc) => (
+        competences.map((bloc) => (
           <div class="card">
-            <h3 class="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-100">
-              <bloc.icon class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
+            <h3 class="flex items-center gap-2.5 text-lg font-bold">
+              <span class="tile tile-sm"><bloc.icone class="size-5" aria-hidden="true" /></span>
               {bloc.titre}
             </h3>
-            <ul class="mt-4 space-y-2 text-sm text-slate-700 dark:text-slate-400">
-              {bloc.items.map((item) => (
-                <li class="flex gap-2">
-                  <span class="mt-2 size-1.5 shrink-0 rounded-full bg-brand-700 dark:bg-brand-300" aria-hidden="true" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <ul class="mt-4 flex flex-wrap gap-1.5">{bloc.items.map((i) => <li class="pill">{i}</li>)}</ul>
           </div>
         ))
       }
     </div>
-  </section>
-
-  <!-- Réalisations -->
-  <section class="container-page py-4" aria-labelledby="realisations">
-    <div class="flex items-end justify-between gap-4">
-      <div>
-        <p class="eyebrow">Réalisations</p>
-        <h2 id="realisations" class="h2 mt-2">Stage, formation et projets personnels</h2>
-      </div>
-      <a href={url('realisations/')} class="link shrink-0 text-sm">Tout voir →</a>
-    </div>
-    <div class="mt-6 grid gap-4 md:grid-cols-2">
+    <div class="mt-4.5 grid items-center gap-5 rounded-[1.1rem] border border-[var(--line)] bg-[var(--bg-soft)] p-5 md:grid-cols-[repeat(3,1fr)_auto]">
       {
-        realisations.slice(0, 4).map((r) => (
-          <EntryCard
-            href={url(`realisations/${r.id}/`)}
-            title={r.data.title}
-            description={r.data.description}
-            label={CONTEXTES[r.data.contexte]}
-            meta={r.data.periode}
-            tags={r.data.outils}
-          />
-        ))
+        BLOCS.map((b) => {
+          const ok = b.competences.filter((c) => couvertes.has(c.id)).length;
+          return (
+            <div>
+              <p class="text-sm font-bold">{b.titre.split(' — ')[0]} — {b.titre.split(' — ')[1].replace(' (option SISR)', '')}</p>
+              <div class="dots mt-2" role="img" aria-label={`${ok} compétences sur ${b.competences.length} démontrées`}>
+                {b.competences.map((_, n) => <i class:list={[n >= ok && 'off']} />)}
+                <span class="muted ml-1.5 text-sm">{ok} / {b.competences.length}</span>
+              </div>
+            </div>
+          );
+        })
       }
+      <a href={url('competences/')} class="btn btn-ghost">Détail par compétence <ArrowRight class="size-4" aria-hidden="true" /></a>
     </div>
   </section>
 
-  <!-- Accès rapides -->
-  <section class="container-page py-10" aria-label="Accès rapides">
-    <div class="grid gap-4 sm:grid-cols-2">
-      <a href={url('competences/')} class="card card-link">
-        <TableProperties class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-        <h3 class="mt-3 font-semibold text-slate-900 dark:text-slate-100">Tableau de synthèse</h3>
-        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Chaque compétence du référentiel BTS SIO reliée aux réalisations qui la démontrent.
-        </p>
-      </a>
-      <a href={url('veille/')} class="card card-link">
-        <BookOpen class="size-5 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-        <h3 class="mt-3 font-semibold text-slate-900 dark:text-slate-100">Veille technologique</h3>
-        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-          Les passkeys : vers la fin des mots de passe ?
-        </p>
-      </a>
+  <!-- Parcours -->
+  <section class="section container-page" aria-labelledby="t-parcours">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Parcours</p>
+        <h2 id="t-parcours" class="h2 mt-1.5">Une reconversion vers l'informatique</h2>
+        <p class="muted mt-2 max-w-2xl">Après un DEUST puis une licence Métiers de la forme, je me suis orienté vers l'administration des systèmes et des réseaux.</p>
+      </div>
+      <a href={url('parcours/')} class="btn btn-ghost">Tout le parcours <ArrowRight class="size-4" aria-hidden="true" /></a>
+    </div>
+    <ol class="mt-7 grid gap-4 md:grid-cols-3">
+      <li class="etape actuelle">
+        <span class="tile"><GraduationCap class="size-6" aria-hidden="true" /></span>
+        <div><p class="font-bold">BTS SIO — option SISR <span class="badge-encours">en cours</span></p><p class="muted text-sm">Lycée Henri Matisse · 2025 – 2027</p></div>
+      </li>
+      <li class="etape">
+        <span class="tile"><Landmark class="size-6" aria-hidden="true" /></span>
+        <div><p class="font-bold">Stage — Ministère de la Justice</p><p class="muted text-sm">DIT, Toulouse · {stage.periode}</p></div>
+      </li>
+      <li class="etape">
+        <span class="tile"><GraduationCap class="size-6" aria-hidden="true" /></span>
+        <div><p class="font-bold">DEUST puis licence Métiers de la forme</p><p class="muted text-sm">Coach sportif, puis préparateur physique en alternance</p></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Veille -->
+  <section class="section container-page" aria-labelledby="t-veille">
+    <p class="eyebrow">Veille technologique</p>
+    <h2 id="t-veille" class="h2 mt-1.5">{synthese?.data.title ?? 'Veille technologique'}</h2>
+    <div class="mt-7 grid gap-4.5 md:grid-cols-[1.3fr_1fr]">
+      {
+        synthese && (
+          <div class="card panel-brand">
+            <BookOpen class="size-7" aria-hidden="true" />
+            <h3 class="mt-3 text-xl font-bold">Fiche de synthèse</h3>
+            <p class="muted mt-1.5">{synthese.data.description}</p>
+            <a href={url(`veille/${synthese.id}/`)} class="btn btn-ghost mt-5">Lire la synthèse <ArrowRight class="size-4" aria-hidden="true" /></a>
+          </div>
+        )
+      }
+      <div class="card flex flex-col">
+        <span class="live">Mis à jour chaque jour</span>
+        <h3 class="mt-3 flex items-center gap-2 text-xl font-bold"><Newspaper class="size-5" aria-hidden="true" /> Fil d'actualités</h3>
+        <p class="muted mt-1.5 flex-1">Les publications de mes sources (CERT-FR, ANSSI, CNIL, presse spécialisée), collectées automatiquement et filtrées sur mon sujet.</p>
+        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+          <a href={url('veille/actualites/')} class="link inline-flex items-center gap-1">Ouvrir le fil <ArrowRight class="size-4" aria-hidden="true" /></a>
+          <a href={url('veille/')} class="link inline-flex items-center gap-1">Ma méthode de veille <ArrowRight class="size-4" aria-hidden="true" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="container-page mt-20" aria-labelledby="t-contact">
+    <div class="card panel-brand grid items-center gap-6 p-8 md:grid-cols-[1fr_auto] md:p-10">
+      <div>
+        <h2 id="t-contact" class="h2">Une proposition de stage ou d'alternance ?</h2>
+        <p class="muted mt-2">Le plus simple est de m'écrire par e-mail.</p>
+      </div>
+      <div class="flex flex-wrap gap-2.5">
+        <a href={`mailto:${SITE.email}`} class="btn btn-ghost"><Mail class="size-4" aria-hidden="true" /> M'écrire</a>
+        {SITE.linkedin && <a href={SITE.linkedin.url} rel="me noopener" class="btn btn-ghost"><BrandIcon name="linkedin" /> LinkedIn</a>}
+      </div>
     </div>
   </section>
 </BaseLayout>

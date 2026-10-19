@@ -1,0 +1,43 @@
+---
+/**
+ * Boutons de filtre des réalisations par contexte. Sans JavaScript, toutes les cartes restent visibles.
+ * Les cartes filtrées sont les éléments [data-contexte] contenus dans #{cible}.
+ */
+import { CONTEXTES, type Contexte } from '@/config/referentiel';
+
+interface Props {
+  cible: string;
+  compte: Record<Contexte, number>;
+}
+
+const { cible, compte } = Astro.props;
+const total = Object.values(compte).reduce((a, b) => a + b, 0);
+const options = (Object.keys(CONTEXTES) as Contexte[]).filter((c) => compte[c] > 0);
+---
+
+<div class="filtres flex flex-wrap gap-2" role="group" aria-label="Filtrer les réalisations" data-cible={cible}>
+  <button type="button" class="filtre" data-f="tout" aria-pressed="true">Toutes · {total}</button>
+  {
+    options.map((c) => (
+      <button type="button" class="filtre" data-f={c} aria-pressed="false">
+        {CONTEXTES[c]} · {compte[c]}
+      </button>
+    ))
+  }
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.filtres').forEach((groupe) => {
+    const cible = document.getElementById(groupe.dataset.cible ?? '');
+    const boutons = groupe.querySelectorAll<HTMLButtonElement>('.filtre');
+    boutons.forEach((b) =>
+      b.addEventListener('click', () => {
+        boutons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        cible?.querySelectorAll<HTMLElement>('[data-contexte]').forEach((carte) => {
+          const visible = b.dataset.f === 'tout' || carte.dataset.contexte === b.dataset.f;
+          (carte.closest('li') ?? carte).hidden = !visible;
+        });
+      }),
+    );
+  });
+</script>
