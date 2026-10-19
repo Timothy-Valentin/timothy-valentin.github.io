@@ -14,6 +14,7 @@ interface Props {
 const { title, description = SITE.description, type = 'website' } = Astro.props;
 const fullTitle = title ? `${title} · ${SITE.author}` : SITE.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(url('og-image.png'), Astro.site).href;
 ---
 
 <!doctype html>
@@ -33,6 +34,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.author} — ${SITE.role}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <script is:inline>
       // Thème clair par défaut ; le mode sombre n'est appliqué que sur choix explicite du visiteur.
       try {
@@ -48,6 +56,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     >
     <Header />
     <main id="contenu" class="flex-1">
+      <p class="print-only">{SITE.author} — {SITE.role} · Page imprimée depuis {canonical.href}</p>
       <slot />
     </main>
     <Footer />

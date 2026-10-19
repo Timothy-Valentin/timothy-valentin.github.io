@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CV Timothy Valentin — BTS SIO SISR</title>
+<!--
+  Source du CV publié sur le portfolio (version sans numéro de téléphone).
+  Générer le PDF : msedge --headless --no-pdf-header-footer --print-to-pdf=cv.pdf cv-timothy-valentin.html
+-->
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 210mm; height: 297mm; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; color: #1b2233; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { display: grid; grid-template-columns: 69mm 1fr; width: 210mm; height: 297mm; overflow: hidden; }
+  svg { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  /* ---------- Colonne latérale ---------- */
+  .side { background: linear-gradient(180deg, #0c1d3f 0%, #10285a 55%, #0f2447 100%); color: #dbe4f5; padding: 8.5mm 6.3mm 6mm; font-size: 8.3pt; }
+  .avatar { width: 30mm; height: 30mm; margin: 0 auto 6mm; border-radius: 50%; border: 1.2mm solid #2f6fde; box-shadow: 0 0 0 0.6mm rgba(255,255,255,.55) inset; display: grid; place-items: center; background: rgba(255,255,255,.06); }
+  .avatar span { font-family: 'Segoe UI Black', 'Segoe UI', sans-serif; font-weight: 900; font-size: 24pt; color: #ffffff; letter-spacing: .02em; }
+  .side h2 { font-size: 8.6pt; font-weight: 700; color: #ffffff; letter-spacing: .22em; text-transform: uppercase; padding-bottom: 1.6mm; border-bottom: 0.3mm solid rgba(219,228,245,.35); margin: 0 0 2mm; }
+  .side section { margin-bottom: 4.2mm; }
+  .side ul { list-style: none; }
+  .contact li { display: flex; align-items: center; gap: 2.4mm; margin-bottom: 1.3mm; line-height: 1.25; }
+  .contact svg { font-size: 9pt; color: #dbe4f5; }
+  .skills h3 { font-size: 8.2pt; font-weight: 600; color: #ffffff; margin: 1.8mm 0 1mm; }
+  .skills h3:first-of-type { margin-top: 0; }
+  .pills { display: flex; flex-wrap: wrap; gap: 1.1mm; }
+  .pills span { font-size: 7.5pt; color: #dbe4f5; border: 0.25mm solid rgba(219,228,245,.45); border-radius: 3mm; padding: 0.35mm 2mm; }
+  .bullets li { position: relative; padding-left: 3.2mm; margin-bottom: 1.3mm; line-height: 1.25; }
+  .bullets li::before { content: ''; position: absolute; left: 0; top: 1.5mm; width: 1.2mm; height: 1.2mm; border-radius: 50%; background: #2f6fde; }
+  .bullets small { display: block; font-size: 7.6pt; color: #9fb2d6; }
+  .langues li { display: flex; justify-content: space-between; margin-bottom: 1.4mm; }
+  .langues li span:last-child { color: #9fb2d6; }
+
+  /* ---------- Colonne principale ---------- */
+  .main { padding: 9.5mm 10mm 8mm 6.2mm; font-size: 9pt; }
+  .nom { font-family: 'Segoe UI Black', 'Segoe UI', sans-serif; font-weight: 900; font-size: 25pt; line-height: 1.15; color: #0f2447; letter-spacing: .015em; }
+  .nom em { font-style: normal; color: #2f6fde; }
+  .titre { font-size: 11pt; font-weight: 600; color: #5b6475; margin-top: 0.6mm; }
+  .recherche { display: flex; gap: 3mm; align-items: flex-start; margin-top: 4mm; background: #e8f0fd; border-left: 1mm solid #2f6fde; border-radius: 0 2mm 2mm 0; padding: 2.6mm 4mm; line-height: 1.35; }
+  .recherche svg { font-size: 12pt; color: #2f6fde; margin-top: 0.6mm; }
+  .recherche b { color: #0f2447; }
+  .accroche { color: #333b4d; line-height: 1.42; margin-top: 3.6mm; }
+  .main h2 { display: flex; align-items: center; gap: 2mm; font-family: 'Segoe UI Black', 'Segoe UI', sans-serif; font-weight: 900; font-size: 10.5pt; color: #0f2447; letter-spacing: .14em; text-transform: uppercase; margin: 5.2mm 0 2.6mm; }
+  .main h2 svg { color: #2f6fde; font-size: 11pt; }
+  .main h2::after { content: ''; flex: 1; height: 0.3mm; background: #dfe4ec; margin-left: 2mm; }
+  .item { position: relative; padding-left: 4.4mm; margin-bottom: 2.6mm; }
+  .item::before { content: ''; position: absolute; left: 0; top: 1.6mm; width: 1.9mm; height: 1.9mm; border-radius: 50%; background: #2f6fde; }
+  .item .tete { display: flex; justify-content: space-between; gap: 4mm; align-items: baseline; }
+  .item .tete b { font-size: 9.8pt; color: #0f2447; }
+  .item .tete span { font-size: 8.2pt; font-weight: 600; color: #2f6fde; white-space: nowrap; }
+  .item .sous { font-size: 8.5pt; color: #5b6475; margin-top: 0.2mm; }
+  .item ul { list-style: none; margin-top: 1.2mm; }
+  .item li { position: relative; padding-left: 3.6mm; line-height: 1.4; margin-bottom: 0.5mm; }
+  .item li::before { content: ''; position: absolute; left: 0.6mm; top: 1.9mm; width: 1mm; height: 1mm; border-radius: 50%; background: #9aa6ba; }
+  .tags { display: flex; flex-wrap: wrap; gap: 1.2mm; margin-top: 1.4mm; }
+  .tags span { font-size: 7.4pt; font-weight: 600; color: #2f6fde; background: #e8f0fd; border-radius: 1.4mm; padding: 0.3mm 1.8mm; }
+  .projets { display: grid; grid-template-columns: 1fr 1fr; gap: 2.6mm; }
+  .projet { border: 0.3mm solid #dfe4ec; border-radius: 2mm; padding: 2.6mm 3.2mm; }
+  .projet b { display: block; font-size: 9pt; color: #0f2447; margin-bottom: 0.8mm; }
+  .projet p { font-size: 8.3pt; color: #3b4356; line-height: 1.38; }
+</style>
+</head>
+<body>
+<div class="page">
+  <aside class="side">
+    <div class="avatar"><span>TV</span></div>
+
+    <section>
+      <h2>Contact</h2>
+      <ul class="contact">
+        <li><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>timothy.valentins@gmail.com</li>
+        <li><svg viewBox="0 0 24 24"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Toulouse</li>
+        <li><svg viewBox="0 0 24 24"><path d="M5 17h14v-5l-2-5H7l-2 5zM5 17v2M19 17v2M5 12h14"/><circle cx="8" cy="14.5" r=".6"/><circle cx="16" cy="14.5" r=".6"/></svg>Permis B, véhiculé</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>En ligne</h2>
+      <ul class="contact">
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>timothy-valentin.github.io</li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>github.com/timothy-valentin</li>
+        <li><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>linkedin.com/in/timothyvalentin</li>
+        <li><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Root-Me : TimothyValentin</li>
+        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>TryHackMe : TimothyValentin</li>
+      </ul>
+    </section>
+
+    <section class="skills">
+      <h2>Compétences</h2>
+      <h3>Réseaux</h3>
+      <div class="pills"><span>TCP/IP · OSI</span><span>VLAN 802.1Q</span><span>Routage inter-VLAN</span><span>DHCP</span><span>DNS</span><span>Cisco IOS</span></div>
+      <h3>Systèmes</h3>
+      <div class="pills"><span>Windows Server</span><span>Active Directory</span><span>Linux</span></div>
+      <h3>Virtualisation</h3>
+      <div class="pills"><span>Proxmox VE</span><span>VirtualBox</span></div>
+      <h3>Sécurité</h3>
+      <div class="pills"><span>pfSense</span><span>Segmentation</span><span>Wireshark</span><span>Sauvegardes</span></div>
+      <h3>Outils</h3>
+      <div class="pills"><span>Packet Tracer</span><span>PuTTY</span><span>GLPI</span><span>Git / GitHub</span></div>
+    </section>
+
+    <section>
+      <h2>Certifications &amp; cyber</h2>
+      <ul class="bullets">
+        <li>Introduction to Cybersecurity<small>Cisco Networking Academy</small></li>
+        <li>TryHackMe : 6 salles terminées<small>Dont Junior Security Analyst Intro</small></li>
+        <li>Root-Me : 8 challenges<small>Catégorie Réseau (analyse de trames)</small></li>
+        <li>PSC1<small>Premiers secours</small></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Langues</h2>
+      <ul class="langues">
+        <li><span>Anglais</span><span>Intermédiaire</span></li>
+        <li><span>Espagnol</span><span>Débutant</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Intérêts</h2>
+      <ul class="bullets"><li>Sports d'endurance et de combat</li></ul>
+    </section>
+  </aside>
+
+  <main class="main">
+    <h1 class="nom">TIMOTHY <em>VALENTIN</em></h1>
+    <p class="titre">Étudiant BTS SIO option SISR · Administration systèmes &amp; réseaux</p>
+
+    <div class="recherche">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <div><b>Recherche un stage du 4 janvier au 5 février 2027</b><br>Administration systèmes et réseaux · Toulouse et agglomération</div>
+    </div>
+
+    <p class="accroche">En 2e année de BTS SIO SISR après une première carrière de coach sportif et préparateur physique. J'y ai appris à analyser un besoin, à expliquer simplement et à suivre les personnes dans la durée : les bases du support utilisateur. Méthodique en diagnostic, je pratique en formation sur un lab Proxmox, Active Directory et pfSense.</p>
+
+    <h2><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Expérience en informatique</h2>
+    <div class="item">
+      <div class="tete"><b>Stagiaire réseau · Ministère de la Justice (DIT)</b><span>Mai – juin 2026</span></div>
+      <p class="sous">Toulouse, site de Jolimont · Stage de 1re année de BTS SIO, 5 semaines</p>
+      <ul>
+        <li>Recueil des besoins par entretiens (greffe, magistrats, services, équipes de la DIT) pour un bâtiment judiciaire.</li>
+        <li>Proposition d'infrastructure réseau avec cloisonnement des flux, défendue devant un jury de spécialistes.</li>
+        <li>Montage, brassage et configuration de ma maquette : commutateurs, routeurs et pare-feu (console série, SSH).</li>
+        <li>Diagnostic et résolution de pannes injectées par le tuteur, avec une méthode par couches OSI.</li>
+      </ul>
+      <div class="tags"><span>Cisco IOS</span><span>VLAN</span><span>PuTTY</span><span>Recueil des besoins</span><span>Dépannage</span></div>
+    </div>
+
+    <h2><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Projets techniques</h2>
+    <div class="projets">
+      <div class="projet"><b>Réseau d'entreprise complet</b><p>Proxmox VE, pare-feu pfSense, contrôleur de domaine Windows Server (AD DS, DNS, DHCP, GPO), clients Windows et Ubuntu, sauvegardes.</p></div>
+      <div class="projet"><b>Serveur reconditionné</b><p>Remise en état (RAM, disques), installation de Proxmox VE, machines virtuelles Debian, Ubuntu et Kali Linux.</p></div>
+      <div class="projet"><b>Segmentation VLAN</b><p>Packet Tracer : VLAN par service, trunk 802.1Q, router-on-a-stick, étendues DHCP avec exclusions et relais.</p></div>
+      <div class="projet"><b>Portfolio sur GitHub Pages</b><p>Site statique versionné sous Git, déployé par GitHub Actions, sans traceur, avec security.txt.</p></div>
+    </div>
+
+    <h2><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5zM6 12v5c3 2 9 2 12 0v-5"/></svg>Formation</h2>
+    <div class="item">
+      <div class="tete"><b>BTS SIO, option SISR</b><span>2025 – 2027</span></div>
+      <p class="sous">Lycée Henri Matisse, Cugnaux (31) · 2e année en cours</p>
+    </div>
+    <div class="item">
+      <div class="tete"><b>Licence professionnelle et DEUST Métiers de la forme</b><span>2020 – 2023</span></div>
+      <p class="sous">Université Toulouse III – Paul Sabatier</p>
+    </div>
+    <div class="item">
+      <div class="tete"><b>Baccalauréat scientifique (SVT, option ISN)</b><span>2020</span></div>
+      <p class="sous">Lycée Henri Matisse, Cugnaux (31)</p>
+    </div>
+
+    <h2><svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 17.5h11M4 9v6M20 9v6M2 11v2M22 11v2"/></svg>Expérience antérieure</h2>
+    <div class="item">
+      <div class="tete"><b>Coach sportif puis préparateur physique</b><span>2020 – 2023</span></div>
+      <p class="sous">Gymnasia et L'Orange Bleue (stages) · SD Sport et Santé (alternance)</p>
+      <ul><li>Suivi individuel de particuliers comme de sportifs professionnels : analyse du besoin, explications adaptées, suivi dans la durée.</li></ul>
+    </div>
+  </main>
+</div>
+</body>
+</html>

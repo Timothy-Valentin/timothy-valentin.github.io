@@ -18,7 +18,7 @@ export const SITE = {
     url: string;
   } | null,
   /** Chemin du CV dans /public (ex. 'cv-timothy-valentin.pdf'), ou null tant qu'il n'est pas prêt. */
-  cv: null as string | null,
+  cv: 'cv-timothy-valentin.pdf' as string | null,
   recherche: [
     'Stage de 2e année de BTS SIO',
     'Alternance en cybersécurité pour la rentrée 2027 (SOC, administration systèmes et réseaux sécurisés)',
